@@ -1,85 +1,78 @@
 import {Router} from 'express';
+import LogHelper from '../helpers/validacion-helper.js';
 import ProvinceService from '../services/province-service.js';
 const router = Router();
 const svc = new ProvinceService();
 
-router.get ('',async (req,res) =>{
 
-let respuesta;
-const returnArray = await svc.getAllAsync();
-if(returnArray != null)
-{
-respuesta = res.status(200).json(returnArray);
-}
-else
-{
-    respuesta = res.status(500).send('Error interno.')
-}
-return respuesta;
-})
-
-router.get('/:id',async (req,res) =>
-{
-let respuesta;
-const province = await svc.getByIdAsync(req.params.id);
-if( province != null)
-{
-    respuesta = res.status(200).json(province);
-}
-else
-{
-    respuesta = res.status(500).send('Error interno.');
-}
-return respuesta;
-
-})
-
-router.post('',async (req,res) => {
-
-    let objeto =  req.body;
-    let respuesta;
-    const province = await svc.createAsync(objeto);
-    if( province != null)
-    {
-        respuesta = res.status(200).json(province);
+router.get('', async (req, res) => {
+    try {
+        const returnArray = await svc.getAllAsync();
+        if (returnArray != null) {
+            return res.status(200).json(returnArray);
+        } else {
+            return res.status(500).send('Error interno.');
+        }
+    } catch (error) {
+        LogHelper.logError(error);
+        return res.status(500).send('Error interno.');
     }
-    else
-    {
-        respuesta = res.status(500).send('Error interno.');
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const province = await svc.getByIdAsync(req.params.id);
+        if (province != null) {
+            return res.status(200).json(province);
+        } else {
+            return res.status(500).send('Error interno.');
+        }
+    } catch (error) {
+        LogHelper.logError(error);
+        return res.status(500).send('Error interno.');
     }
-    return respuesta;
-})
+});
 
-router.put('',async (req,res) =>{
-
-    let objeto =  req.body; 
-    let respuesta;
-    const province = await svc.updateAsync(objeto);
-    if( province != null)
-    {
-        respuesta = res.status(200).json(province);
+router.post('', async (req, res) => {
+    try {
+        const province = await svc.createAsync(req.body);
+        if (province != null) {
+            return res.status(200).json(province);
+        } else {
+            return res.status(500).send('Error interno.');
+        }
+    } catch (error) {
+        LogHelper.logError(error);
+        return res.status(500).send('Error interno.');
     }
-    else
-    {
-        respuesta = res.status(500).send('Error interno.');
+});
+
+router.put('', async (req, res) => {
+    try {
+        const province = await svc.updateAsync(req.body);
+        if (province != null) {
+            return res.status(200).json(province);
+        } else {
+            return res.status(500).send('Error interno.');
+        }
+    } catch (error) {
+        LogHelper.logError(error);
+        return res.status(500).send('Error interno.');
     }
-    return respuesta;
-})
+});
 
-router.delete('/:id', async (req,res) => {
-
-    let respuesta;
-const province = await svc.deleteByIdAsync(req.params.id);
-if( province != null)
-{
-    respuesta = res.status(200).json(province);
-}
-else
-{
-    respuesta = res.status(500).send('Error interno.');
-}
-return respuesta;
-    
-})
+router.delete('/:id', async (req, res) => {
+    try {
+        const province = await svc.deleteByIdAsync(req.params.id);
+        if (province != null) {
+            return res.status(200).json(province);
+        } else {
+            return res.status(500).send('Error interno.');
+        }
+    } catch (error) {
+        LogHelper.logError(error);
+        return res.status(500).send('Error interno.');
+    }
+});
 
 export default  router

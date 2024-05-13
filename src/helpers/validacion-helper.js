@@ -1,42 +1,72 @@
-import LogHelper from './../helpers/log-helper.js'
+import 'dotenv/config';
+import fs from 'fs';
 
+class LogHelper {
 
-export default class ProvinceRepository 
-{ 
+    constructor() {
 
-    getByIdAsync = async (id) => {
+        this.filePath            = process.env.LOG_FILE_PATH;
 
-        let returnEntity = null;
+        this.fileName            = process.env.LOG_FILE_NAME;
 
-        const client = new Client(DBConfig);
+        this.logToFileEnabled    = process.env.LOG_TO_FILE_ENABLED.toLowerCase() === 'true';
 
-        try {
+        this.logToConsoleEnabled = process.env.LOG_TO_CONSOLE_ENABLED.toLowerCase() === 'true';
 
-            // Obtengo el Cliente y me conecto a la base de datos.
+        if (!fs.existsSync(this.filePath)) {
+            fs.mkdirSync(this.filePath, { recursive: true });
 
-            client = await client.connect();
+    }
+    /**
 
-            const sql = `SELECT * FROM provinces WHERE id=$1`;
+     * Este método almacena en un archivo de texto y/o por muestra consola información del Error.
 
-            const values = [id];
+     * @param {*} errorObject
 
-            const result = await client.query(sql, values);
+     */
 
-            if (result.rows.length > 0){
+   function logError(errorObject)  {
+        if (this.logToFileEnabled) {
+            const timestamp = new Date().toISOString();
+            const logMessage = `[${timestamp}] ${errorObject.stack}\n`;
 
-                returnEntity = result.rows[0];
-
-            }
-
-        } catch (error) {
-
-            LogHelper.logError(error); // Esto funciona si hicieron la clase!
-
-        } finally {
-
-            await client.end();
-
+            const logFilePath = `${this.filePath}/${this.fileName}`;
+            fs.appendFile(logFilePath, logMessage, (err) => {
+                if (err) {
+                    console.error(`Error al escribir en el archivo de registro: ${err}`);
+                }
+            });
         }
-        return returnEntity;
+
+        if (this.logToConsoleEnabled) {
+            console.error(errorObject);
         }
+    }}
 }
+
+
+export default new LogHelper();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
