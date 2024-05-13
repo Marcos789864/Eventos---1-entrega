@@ -1,4 +1,4 @@
-import ProvinceRepositorie from './src/repostories/province-repository.js';
+import ProvinceRepository from '../repositories/province-repository.js';
 
 export default class ProvinceService{
 
@@ -9,8 +9,31 @@ export default class ProvinceService{
         return returnArray;
     }
 
-    getByIdAsync = async (id) => {}
-    createAsync = async (entity) => {}
-    updateAsync = async (entity) => {}
-    deleteByIdAsync = async (id) => {}
+    getByIdAsync = async (id) => 
+    {
+        const repo = new ProvinceRepository();
+        const province = await repo.getByIdAsync(id);
+        return province;
+    }
+    createAsync = async (entity) => 
+    {
+        const repo = new ProvinceRepository();
+        const success = await repo.createAsync(entity);
+        return success;
+    }
+
+    updateAsync = async (entity) => 
+    {
+        const repo = new ProvinceRepository();
+        const success = await repo.createAsync(entity);
+        return success;
+
+    }
+
+    deleteByIdAsync = async (id) => 
+    {
+        const repo = new ProvinceRepository();
+        const success = await repo.createAsync(id);
+        return success;
+    }
 }
