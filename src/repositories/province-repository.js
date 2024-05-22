@@ -59,6 +59,7 @@ getAllAsync = async () =>
     return success;
         
     }
+
     updateAsync = async (entity) => 
     {
         let success = false;
@@ -95,7 +96,13 @@ getAllAsync = async () =>
         console.log(error);
     }
     return success;
-
     }
+
+
+
+    
+
+
+
 }
 
