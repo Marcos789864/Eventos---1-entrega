@@ -40,6 +40,8 @@ export default class ProvinceRepository{
         }
         return returnArray;
     }
+
+
         
     createAsync = async (entity) => 
     {
@@ -95,4 +97,12 @@ export default class ProvinceRepository{
         }
         return success;
     }
+
+
+
+    
+
+
+
 }
+
