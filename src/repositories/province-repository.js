@@ -97,12 +97,4 @@ export default class ProvinceRepository{
         }
         return success;
     }
-
-
-
-    
-
-
-
 }
-

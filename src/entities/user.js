@@ -1,4 +1,4 @@
-class Users
+class User
 {
     id;
     first_name;
@@ -16,4 +16,4 @@ ConstructorEnrollments(i,f,l,u,p)
     this.password = p;
 }
 
-export default Users
+export default User
