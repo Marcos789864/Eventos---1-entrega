@@ -86,11 +86,6 @@ export default class ProvinceRepository{
             await client.connect();
             const sql = 'DELETE FROM provinces WHERE id = $1';
 
-<<<<<<< HEAD
-        const result = await client.query(sql, [id]);
-        if (result.rowCount > 0) {
-            success = true; 
-=======
             const result = await client.query(sql, [id]);
             if (result.rowCount > 0) {
                 success = true;
@@ -99,8 +94,8 @@ export default class ProvinceRepository{
             await client.end();
         } catch (error) {
             console.log(error);
->>>>>>> 63dc7351268fd5628f4ce6ef724337d91d0df040
         }
         return success;
     }
 }
+
