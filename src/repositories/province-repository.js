@@ -41,6 +41,8 @@ getAllAsync = async () =>
     return returnArray;
 
     }
+
+
     createAsync = async (entity) => 
     {
         let success = false;
@@ -97,12 +99,6 @@ getAllAsync = async () =>
     }
     return success;
     }
-
-
-
-    
-
-
 
 }
 
