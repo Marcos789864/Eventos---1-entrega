@@ -151,7 +151,22 @@ export default class Events
         }
         return result;
     }
+    getEventDetail = async () =>
+    {
+        const client = new Client(DBConfig);
+        try {
+            await client.connect();
+            const sql = 'SELECT * FROM events INNER JOIN event_tags ON events.id = event_tags.id_event INNER JOIN tags ON event_tags.id_tag = tags.id INNER JOIN event_enrollments ON events.id = event.enrollments.id_event INNER JOIN users ON events.id_creator_user = users.id INNER JOIN event_categories ON events.id_event_category = event_categories.id INNER JOIN event_locations ON events.id_event_location = event_location.id INNER JOIN locations ON event_locations.id_location = locations.id INNER JOIN provinces ON locations.id_province = provinces.id';
+            const result = await client.query(sql);
+            if (result.rowCount > 0) {
+                success = true;
+            }
 
+            await client.end();
+        } catch (error) {
+            console.log(error);
+        }
+    }
     getUsersFromEvent = async () =>
     {
         const client = new Client(DBConfig);
