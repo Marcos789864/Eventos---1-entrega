@@ -88,9 +88,6 @@ router.get('/:id/locations', async (req,res) =>
         LogHelper.logError(error);
         return res.status(500).send('Error interno.');
     }
-
-
-
 });
 
 export default  router

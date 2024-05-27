@@ -6,9 +6,9 @@ const svc = new UserService();
 
 router.post('', async (req, res) => {
     try {
-        const province = await svc.createAsync(req.body);
+        const user = await svc.createAsync(req.body);
         if (province != null) {
-            return res.status(200).json(province);
+            return res.status(200);
         } else {
             return res.status(500).send('Error interno.');
         }
@@ -18,13 +18,11 @@ router.post('', async (req, res) => {
     }
 });
 
-router.post('', async (req, res) => {
+router.post('/register', async (req, res) => {
     try {
-        const province = await svc.createAsync(req.body);
-        if (province != null) {
-            return res.status(200).json(province);
-        } else {
-            return res.status(500).send('Error interno.');
+        const user = await svc.createAsync(req.body);
+        if (user) {
+            return res.status(200).send('Created');
         }
     } catch (error) {
         LogHelper.logError(error);

@@ -7,17 +7,14 @@ export default class UserService
     return jwt.sign({ userId }, 'secreto'); // Aquí 'secreto' es tu clave secreta, cámbiala por una más segura
     };
 
-    loginUser = async (username, password) => 
+    getUserByUsername = async (username, password) => 
     {  
-        const user = await userRepository.getUserByUsername(username); 
-        if (!user || user.password !== password) {
-            throw new Error("Usuario o clave inválida.");
-        }
-        const token = generateJwtToken(user.id);
-        return { success: true, message: "Usuario autenticado.", token };
+        const repo = new UserRepository();
+        const success = await repo.getUserByUsername(username,password);
+        return success;
     };
 
-    createAsync = async (username, password) => 
+    createAsync = async (entity) => 
     {
         const repo = new UserRepository();
         const success = await repo.createUser(entity);
