@@ -90,7 +90,7 @@ getAllAsync = async () =>
 
         const result = await client.query(sql, [id]);
         if (result.rowCount > 0) {
-            success = true;
+            success = true; 
         }
         
         await client.end();
