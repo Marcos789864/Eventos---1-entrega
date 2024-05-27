@@ -8,4 +8,11 @@ export default class ProvinceService
         const Location = await repo.getLocationsByIdProvince(id);
         return Location;
     }
+
+    getAllLocations = async() =>
+    {
+        const repo = new LocationRepository();
+        const Location = await repo.getAllLocations();
+        return Location;
+    }
 }

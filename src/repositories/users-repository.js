@@ -4,23 +4,26 @@ const {Client, Pool } = pkg;
 
 export default class UserRepository
 {
-    getUserByUsername = async (username, password) => 
+    getUserByUsername = async (user) => 
     {
-        let returnArray = null;
+        let returnEntity = null;
         const client = new Client(DBConfig);
         try
         {
             await client.connect();
             const sql =  'SELECT * FROM users WHERE username = $1 AND password = $2';
-            const result = await client.query(sql,[username. password]);
+            const result = await client.query(sql,[user.username,user.password]);
             await client.end();
-            returnArray = result.rows;
+            if (result.rows.length > 0){
+
+                returnEntity = result.rows[0];
+            }
         }
         catch(error)
         {
             console.log(error);
         }
-        return returnArray;
+        return returnEntity;
     };
       
     createUser = async (user) => {

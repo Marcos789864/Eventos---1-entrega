@@ -22,4 +22,22 @@ export default class Locations
     }
     return Location;
     }
+
+    getAllLocations = async() =>{
+        let ArrayLocation = null;
+        const client = new Client(DBConfig);
+    try
+    {
+        await client.connect();
+        const sql =  'SELECT * FROM locations';
+        const result = await client.query(sql);
+        await client.end();
+        ArrayLocation = result.rows;
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+    return ArrayLocation;
+    }
 }

@@ -4,7 +4,7 @@ import UserService from '../services/user-service.js';
 const router = Router();
 const svc = new UserService();
 
-router.post('', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const user = await svc.createAsync(req.body);
         if (province != null) {

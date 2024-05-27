@@ -7,10 +7,10 @@ export default class UserService
     return jwt.sign({ userId }, 'secreto'); // Aquí 'secreto' es tu clave secreta, cámbiala por una más segura
     };
 
-    getUserByUsername = async (username, password) => 
+    getUserByUsername = async (user) => 
     {  
         const repo = new UserRepository();
-        const success = await repo.getUserByUsername(username,password);
+        const success = await repo.getUserByUsername(user);
         return success;
     };
 
