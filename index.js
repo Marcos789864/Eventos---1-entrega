@@ -9,7 +9,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/province",ProvinceRouter); 
-app.use("/api/events",ProvinceRouter)
-app.use("/api/user", ProvinceRouter);
+app.use("/api/events",eventsRouter);
 
 app.listen(port,()=>{ console.log(`Exampleapplisteningonport${port}`)})

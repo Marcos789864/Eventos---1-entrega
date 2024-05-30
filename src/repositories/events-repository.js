@@ -68,17 +68,13 @@ export default class eventsRepository
         try {
             await client.connect();
             const sql = 'SELECT * FROM events';
-    
             const result = await client.query(sql);
-            if (result.rowCount > 0) {
-                success = true;
-            }
-            
             await client.end();
+            return result;
         } catch (error) {
             console.log(error);
         }
-        return result;
+        
     }
     
     getEventByName = async (name) =>
@@ -86,18 +82,16 @@ export default class eventsRepository
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'SELECT * FROM events WHERE name = $1';
-    
+            const sql = 'SELECT * FROM events WHERE lower(name) = lower($1)'; 
             const result = await client.query(sql, [name]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
-            
             await client.end();
+            return result.rows;
+            
+            
         } catch (error) {
             console.log(error);
         }
-        return result;
+        
     }
 
     getEventByCategory = async (category) =>

@@ -4,7 +4,7 @@ import EventsService from '../services/events-service.js';
 const router = Router();
 const svc = new EventsService();
 
-router.get('/api/events', async (req,res) =>
+router.get('', async (req,res) =>
 {
     try
     {
@@ -15,13 +15,12 @@ router.get('/api/events', async (req,res) =>
             return res.status(500).send('Error interno.');
         }
     }catch{
-        LogHelper.logError(error);
         return res.status(500).send('Error interno.');
     }
 });
 
 
-router.get('/api/events/:name', async (req,res) =>
+router.get('/:name', async (req,res) =>
 {
     try
     {
@@ -32,12 +31,11 @@ router.get('/api/events/:name', async (req,res) =>
             return res.status(500).send('Error interno.');
         }
     }catch{
-        LogHelper.logError(error);
         return res.status(500).send('Error interno.');
     }
 });
 
-router.get('/api/events/:category', async (req,res) =>
+router.get('/:category', async (req,res) =>
 {
     try
     {

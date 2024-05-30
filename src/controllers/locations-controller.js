@@ -5,7 +5,7 @@ const router = Router();
 const svc = new LocationService();
 
 
-router.get('/:id/locations', async (req,res) =>
+router.get('/:id/eventLocation', async (req,res) =>
 {
     try {
         const Location = await svc.getLocationsByIdProvince(req.params.id);
