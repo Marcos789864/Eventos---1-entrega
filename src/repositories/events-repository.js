@@ -2,7 +2,7 @@ import DBConfig from '../configs/db-config.js'
 import pkg from 'pg'
 const {Client, Pool } = pkg;
 
-export default class Events
+export default class eventsRepository
 {
 
     createEvent = async (entity) =>
@@ -80,6 +80,7 @@ export default class Events
         }
         return result;
     }
+    
     getEventByName = async (name) =>
     {
         const client = new Client(DBConfig);

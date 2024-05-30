@@ -1,8 +1,8 @@
 import {Router} from 'express';
 import LogHelper from '../helpers/validacion-helper.js';
-import ProvinceService from '../services/locations-service.js';
+import LocationService from '../services/locations-service.js';
 const router = Router();
-const svc = new ProvinceService();
+const svc = new LocationService();
 
 
 router.get('/:id/locations', async (req,res) =>

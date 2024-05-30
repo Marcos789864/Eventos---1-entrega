@@ -1,6 +1,6 @@
 import eventsRepository from '../repositories/events-repository.js';
 
-export default class eventsSerice
+export default class EventsService
 {
     createEvent = async (entity) => 
     {
@@ -25,12 +25,12 @@ export default class eventsSerice
 
     getEvents = async () =>
     {
-        const repo = new eventsRepository();
+        const repo = new eventsRepository ();
         const Events = await repo.getEvents();
         return Events;
     }
 
-    getEventByName = async (name) =>
+    getEventByName = async (name) => 
     {
         const repo = new eventsRepository();
         const Events = await repo.getEventByName(name);
