@@ -39,7 +39,7 @@ router.get('/:category', async (req,res) =>
 {
     try
     {
-        const events = await svc.getEventByName(req.params.category);
+        const events = await svc.getEventByCategory(req.params.category);
         if (events != null) {
             return res.status(200).json(events);
         } else {

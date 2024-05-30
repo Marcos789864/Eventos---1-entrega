@@ -99,18 +99,13 @@ export default class eventsRepository
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'SELECT * FROM events INNER JOIN event_categories ON events.id_event_category = event_categories.id WHERE event_categories.name = $1';
-    
+            const sql = 'SELECT * FROM events INNER JOIN event_categories ON events.id_event_category = event_categories.id WHERE lower(event_categories.name) = lower($1)';
             const result = await client.query(sql, [category]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
-            
             await client.end();
+            return result.rows;     
         } catch (error) {
             console.log(error);
         }
-        return result;
     }
 
     getEventByDate = async (fecha) =>
