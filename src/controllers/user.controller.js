@@ -1,13 +1,14 @@
 import {Router} from 'express';
-import LogHelper from '../helpers/validacion-helper.js';
+import JwtHelper from '../helpers/jwtoken.js';
 import UserService from '../services/user-service.js';
 const router = Router();
 const svc = new UserService();
 
 router.post('/login', async (req, res) => {
+    
     try {
-        const user = await svc.createAsync(req.body);
-        if (province != null) {
+        const user = await svc.getUserByUsername(req.body);
+        if (user != null) {
             return res.status(200);
         } else {
             return res.status(500).send('Error interno.');
