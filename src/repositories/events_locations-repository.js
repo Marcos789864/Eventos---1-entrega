@@ -5,7 +5,7 @@ const {Client, Pool } = pkg;
 export default class events_locations
 {
 
-    getEventLocationFromIdLocation = async (id) =>    
+    getEventLocationsFromIdLocation = async (id) =>    
     {
         const client = new Client(DBConfig);
         try {

@@ -3,7 +3,7 @@ import pkg from 'pg'
 const {Client, Pool } = pkg;
 
 export default class ProvinceRepository{
-    getAllAsync = async () =>
+    getAllProvinces = async () =>
     {
         let returnArray = null;
         const client = new Client(DBConfig);
@@ -22,7 +22,7 @@ export default class ProvinceRepository{
         return returnArray;
     }
 
-    getByIdAsync = async (id) => 
+    getProvincesById = async (id) => 
     {
         let returnArray = null;
         const client = new Client(DBConfig);
@@ -43,7 +43,7 @@ export default class ProvinceRepository{
 
 
         
-    createAsync = async (entity) => 
+    createProvince = async (entity) => 
     {
         let success = false;
         const client = new Client(DBConfig);
@@ -61,7 +61,7 @@ export default class ProvinceRepository{
         return success;
     }
 
-    updateAsync = async (entity) => 
+    updateProvince = async (entity) => 
     {
         let success = false;
         const client = new Client(DBConfig);
@@ -78,7 +78,7 @@ export default class ProvinceRepository{
         }
     }
 
-    deleteByIdAsync = async (id) => 
+    deleteProvinceById = async (id) => 
     {
         let success = false;
         const client = new Client(DBConfig);
