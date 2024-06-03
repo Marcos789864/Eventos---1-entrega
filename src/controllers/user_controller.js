@@ -1,22 +1,17 @@
 import {Router} from 'express';
-import JwtHelper from '../helpers/jwtoken.js';
-import UserService from '../services/user-service.js';
+import UserService from '../services/user_service.js';
 const router = Router();
 const svc = new UserService();
 
 router.post('/login', async (req, res) => {
     
-    try {
-        const user = await svc.getUserByUsername(req.body);
+    console.log("hola");
+        const user = await svc.login(req.body.username,req.body.password);
         if (user != null) {
-            return res.status(200);
+            return res.status(200).json(user);
         } else {
-            return res.status(500).send('Error interno.');
+            return res.status(401).json(user);
         }
-    } catch (error) {
-        LogHelper.logError(error);
-        return res.status(500).send('Error interno.');
-    }
 });
 
 router.post('/register', async (req, res) => {

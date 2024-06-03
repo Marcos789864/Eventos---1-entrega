@@ -1,4 +1,4 @@
-import eventsRepository from '../repositories/events-repository.js';
+import eventsRepository from '../repositories/events_repository.js';
 
 export default class EventsService
 {

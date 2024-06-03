@@ -1,6 +1,5 @@
 import {Router} from 'express';
-import LogHelper from '../helpers/validacion-helper.js';
-import LocationService from '../services/locations-service.js';
+import LocationService from '../services/locations_service.js';
 const router = Router();
 const svc = new LocationService();
 

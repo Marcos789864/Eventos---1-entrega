@@ -1,6 +1,5 @@
 import {Router} from 'express';
-import LogHelper from '../helpers/validacion-helper.js';
-import ProvinceService from '../services/province-service.js';
+import ProvinceService from '../services/province_service.js';
 const router = Router();
 const svc = new ProvinceService();
 

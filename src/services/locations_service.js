@@ -1,4 +1,4 @@
-import LocationRepository from '../repositories/locations-repository.js';
+import LocationRepository from '../repositories/locations_repository.js';
 
 export default class ProvinceService
 {
