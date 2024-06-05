@@ -114,11 +114,7 @@ export default class eventsRepository
         try {
             await client.connect();
             const sql = 'SELECT * FROM events WHERE start_date = $1';
-            const result = await client.query(sql, [fecha]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
-            
+            const result = await client.query(sql, [fecha]); 
             await client.end();
         } catch (error) {
             console.log(error);

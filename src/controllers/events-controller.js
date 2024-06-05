@@ -45,10 +45,27 @@ router.get('/:category', async (req,res) =>
             return res.status(500).send('Error interno.');
         }
     }catch{
-        LogHelper.logError(error);
         return res.status(500).send('Error interno.');
     }
 });
+
+
+router.get('/:start_date'),async (req,res) =>
+{
+    try
+    {
+        const events = await svc.getEventByDate(req.params.start_date)
+        if (events != null) {
+            return res.status(200).json(events);
+        } else {
+            return res.status(500).send('Error interno.');
+        }
+    }
+    catch(error)
+    {
+        return res.status(500).send('Error interno.');
+    }
+}
 
 export default router
 
