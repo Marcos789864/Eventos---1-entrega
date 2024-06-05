@@ -4,7 +4,7 @@ const {Client, Pool } = pkg;
 
 export default class UserRepository
 {
-    getUserByUsername = async (user) => 
+    getUserByUsername = async (username,password) => 
     {
         let returnEntity = null;
         const client = new Client(DBConfig);
@@ -12,7 +12,7 @@ export default class UserRepository
         {
             await client.connect();
             const sql =  'SELECT * FROM users WHERE username = $1 AND password = $2';
-            const result = await client.query(sql,[user.username,user.password]);
+            const result = await client.query(sql,[username,password]);
             await client.end();
             if (result.rows.length > 0){
 

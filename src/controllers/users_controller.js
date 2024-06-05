@@ -1,11 +1,10 @@
 import {Router} from 'express';
-import UserService from '../services/user_service.js';
+import UserService from '../services/users_service.js';
 const router = Router();
 const svc = new UserService();
 
 router.post('/login', async (req, res) => {
-    
-    console.log("hola");
+        
         const user = await svc.login(req.body.username,req.body.password);
         if (user != null) {
             return res.status(200).json(user);
@@ -26,4 +25,4 @@ router.post('/register', async (req, res) => {
     }
 });
 
-export default  router
+export default router

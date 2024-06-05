@@ -4,7 +4,6 @@ const secretKey = 'ChinoMarcos'
 const option = 
 {
     expiresIn : '1h',
-    issuer: 'Mi_organizacion'
 }
 
 class JsonWebToken
