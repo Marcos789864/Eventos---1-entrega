@@ -31,8 +31,8 @@ export default class UserRepository
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'INSERT INTO users (first_name, last_name, username, password) VALUES ($1, $2, $3, $4)';
-            const result = await client.query(sql, [first_name, last_name, username, password]);
+            const sql = 'INSERT INTO users (id,first_name, last_name, username, password) VALUES ($1,$2, $3, $4,$5)';
+            const result = await client.query(sql, [user.id,user.first_name, user.last_name, user.username, user.password]);
             await client.end();
             success = true; 
         }

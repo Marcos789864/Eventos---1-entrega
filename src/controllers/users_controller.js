@@ -14,15 +14,15 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-    try {
-        const user = await svc.createAsync(req.body);
-        if (user) {
-            return res.status(200).send('Created');
+    
+    const user = await svc.register(req.body);
+        if (user != null) {
+            return res.status(200).send(user);
         }
-    } catch (error) {
-        LogHelper.logError(error);
-        return res.status(500).send('Error interno.');
-    }
+        else
+        {
+            return res.status(500).send('Error interno.');
+        }
 });
 
 export default router
