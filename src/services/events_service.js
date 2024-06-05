@@ -30,32 +30,15 @@ export default class EventsService
         return Events;
     }
 
-    getEventByName = async (name) => 
-    {
+    getEvent = async (query) => {
         const repo = new eventsRepository();
-        const Events = await repo.getEventByName(name);
+        const Events = await repo.getEvent(query);
         return Events;
     }
 
-    getEventByCategory = async (category) =>
-    {
+    getEventDetail = async (id) => {
         const repo = new eventsRepository();
-        const Events = await repo.getEventByCategory(category);
+        const Events = await repo.getEventDetail(id);
         return Events;
     }
-
-    getEventByDate = async (fecha) =>
-    {
-        const repo = new eventsRepository();
-        const Events = await repo.getEventByDate(fecha);
-        return Events;
-    }
-
-    getEventByTag = async (tag) =>
-    {
-        const repo = new eventsRepository();
-        const Events = await repo.getEventByTag(tag);
-        return Events;
-    }
-
 }

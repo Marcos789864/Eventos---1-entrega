@@ -19,57 +19,38 @@ router.get('', async (req,res) =>
 });
 
 
-router.get('/:name', async (req,res) =>
-{
-    try
-    {
-        const events = await svc.getEventByName(req.params.name);
+router.get('/params/', async (req, res) => {
+    try {
+        const query = req.query;
+
+        const events = await svc.getEvent(query);
+
         if (events != null) {
             return res.status(200).json(events);
         } else {
             return res.status(500).send('Error interno.');
         }
-    }catch{
+    } catch (error) {
+        console.error(error);
         return res.status(500).send('Error interno.');
     }
 });
 
-router.get('/:category', async (req,res) =>
-{
-    try
-    {
-        const events = await svc.getEventByCategory(req.params.category);
-        if (events != null) {
-            return res.status(200).json(events);
+router.get('/:id', async (req, res) => {
+    try {
+        const id = req.id;
+
+        const event = await svc.getEventDetail(id);
+
+        if (event != null) {
+            return res.status(200).json(event);
         } else {
             return res.status(500).send('Error interno.');
         }
-    }catch{
+    } catch (error) {
+        console.error(error);
         return res.status(500).send('Error interno.');
     }
 });
-
-
-router.get('/:start_date'),async (req,res) =>
-{
-    try
-    {
-        const events = await svc.getEventByDate(req.params.start_date)
-        if (events != null) {
-            return res.status(200).json(events);
-        } else {
-            return res.status(500).send('Error interno.');
-        }
-    }
-    catch(error)
-    {
-        return res.status(500).send('Error interno.');
-    }
-}
 
 export default router
-
-
-
-
-

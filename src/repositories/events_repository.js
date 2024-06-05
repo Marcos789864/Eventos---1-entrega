@@ -77,85 +77,81 @@ export default class eventsRepository
         
     }
     
-    getEventByName = async (name) =>
-    {
+    getEvent = async (query) => {
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'SELECT * FROM events WHERE lower(name) = lower($1)'; 
-            const result = await client.query(sql, [name]);
+    
+            let sql = `
+                SELECT events.*, event_categories.name AS category_name
+                FROM events
+                LEFT JOIN event_categories ON events.id_event_category = event_categories.id
+            `;
+    
+            const queryParams = [];
+    
+            if (query.tag) {
+                sql += ' INNER JOIN event_tags ON events.id = event_tags.id_event';
+                sql += ' INNER JOIN tags ON event_tags.id_tag = tags.id';
+                sql += (queryParams.length > 0 ? ' AND' : ' WHERE') + ' tags.name = $' + (queryParams.length + 1);
+                queryParams.push(query.tag);
+            }
+    
+            if (query.startdate) {
+                sql += (queryParams.length > 0 ? ' AND' : ' WHERE') + ' start_date = $' + (queryParams.length + 1);
+                queryParams.push(query.startdate);
+            }
+    
+            if (query.name) {
+                sql += (queryParams.length > 0 ? ' AND' : ' WHERE') + ' lower(events.name) = lower($' + (queryParams.length + 1) + ')';
+                queryParams.push(query.name);
+            }
+
+            if (query.category) {
+                sql += (queryParams.length > 0 ? ' AND' : ' WHERE') + ' lower(event_categories.name) = lower($' + (queryParams.length + 1) + ')';
+                queryParams.push(query.category);
+            }
+    
+            const result = await client.query(sql, queryParams);
             await client.end();
             return result.rows;
             
+        } catch (error) {
+            console.log(error);
+        }
+    }    
+    
+    getEventDetail = async (id) => {
+        const client = new Client(DBConfig);
+        try {
+            await client.connect();
+            const sql = `
+            SELECT events.*, 
+                   event_categories.name AS category_name, 
+                   event_location.*, 
+                   locations.*, 
+                   provinces.*
+            FROM events
+            LEFT JOIN event_categories ON events.id_event_category = event_categories.id
+            LEFT JOIN event_locations ON events.id_event_locations = event_locations.id
+            LEFT JOIN locations ON event_locations.id_locations = locations.id
+            LEFT JOIN provinces ON locations.id_province = provinces.id
+            WHERE events.id = $1`;
             
-        } catch (error) {
-            console.log(error);
-        }
-        
-    }
-
-    getEventByCategory = async (category) =>
-    {
-        const client = new Client(DBConfig);
-        try {
-            await client.connect();
-            const sql = 'SELECT * FROM events INNER JOIN event_categories ON events.id_event_category = event_categories.id WHERE lower(event_categories.name) = lower($1)';
-            const result = await client.query(sql, [category]);
-            await client.end();
-            return result.rows;     
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    getEventByDate = async (fecha) =>
-    {
-        const client = new Client(DBConfig);
-        try {
-            await client.connect();
-            const sql = 'SELECT * FROM events WHERE start_date = $1';
-            const result = await client.query(sql, [fecha]); 
-            await client.end();
-        } catch (error) {
-            console.log(error);
-        }
-        return result;
-    }
-    getEventByTag = async (tag) =>
-    {
-        const client = new Client(DBConfig);
-        try {
-            await client.connect();
-            const sql = 'SELECT * FROM events INNER JOIN event_tags ON events.id = event_tags.id_event INNER JOIN tags ON event_tags.id_tag = tags.id WHERE tags.name = $1';
-            const result = await client.query(sql, [tag]);
+            const result = await client.query(sql, [id]);
             if (result.rowCount > 0) {
-                success = true;
+                const success = true;
+                // Procesa los resultados si es necesario
+            } else {
+                console.log('No se encontró el evento con el ID proporcionado');
             }
+    
             await client.end();
+            return result.rows; // Retorna los resultados
         } catch (error) {
             console.log(error);
         }
-        return result;
-    }
-    
-    getEventDetail = async () =>
-    {
-        const client = new Client(DBConfig);
-        try {
-            await client.connect();
-            const sql = 'SELECT * FROM events INNER JOIN event_tags ON events.id = event_tags.id_event INNER JOIN tags ON event_tags.id_tag = tags.id INNER JOIN event_enrollments ON events.id = event.enrollments.id_event INNER JOIN users ON events.id_creator_user = users.id INNER JOIN event_categories ON events.id_event_category = event_categories.id INNER JOIN event_locations ON events.id_event_location = event_location.id INNER JOIN locations ON event_locations.id_location = locations.id INNER JOIN provinces ON locations.id_province = provinces.id';
-            const result = await client.query(sql);
-            if (result.rowCount > 0) {
-                success = true;
-            }
-
-            await client.end();
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    
-    
+    };
 }
 
 
