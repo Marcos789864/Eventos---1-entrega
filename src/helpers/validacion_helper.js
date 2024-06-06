@@ -15,13 +15,13 @@
         }
         else
         {
-            return true;
+            return "Ok";
         }
     }
 
-    ValidarCreacionEvento(max_assistance,max_capacity,price,duration_in_minutes)
+    ValidarCreacionEvento(max_assistance,capacidadMax,price,duration_in_minutes)
     {
-        if(max_assistance > max_capacity)
+        if(max_assistance > capacidadMax)
         {
             return "La maxima asistencia no puede superar a la capacidad maxima";
         }
@@ -29,7 +29,7 @@
         {
             return "El precio y la duracion en minutos debe ser mayor o igual a cero";
         }                           
-        return true;
+        return "Ok";
     }
 
     ValidarInscripcionEvento(max_assistance,max_capacity,start_date)
@@ -42,7 +42,7 @@
         {
             return "No puedes ingresar a un evento que ya ocurrio o que tiene lugar el dia de la fecha";
         }
-        return true;
+        return "Ok";
     }
 
 }

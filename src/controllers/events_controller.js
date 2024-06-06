@@ -18,6 +18,21 @@ router.get('', async (req,res) =>
     }
 });
 
+router.post('', async (req,res) =>
+{
+    try
+    {
+        const events = await svc.updateEvent(req.body);
+        if (events == true) {
+            return res.status(200).json("Creacion exitosa");
+        } else {
+            return res.status(500).send(events);
+        }
+    }catch{
+        return res.status(500).send('Error interno.');
+    }
+})
+
 
 router.get('/params/', async (req, res) => {
     try {
@@ -52,5 +67,7 @@ router.get('/:id', async (req, res) => {
         return res.status(500).send('Error interno.');
     }
 });
+
+
 
 export default router

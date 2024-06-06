@@ -11,7 +11,7 @@ export default class eventsRepository
         try
         {
             await client.connect();
-            const sql = 'INSERT INTO provinces (name,description,id_event_category,id_event_location,start_date,duration_in_minutes, price,enabled_for_enrollment,max-assitance,id_creator_user) VALUES ($1,$2,$3,$4,$5,$6,$7.$8,$9,$10)';
+            const sql = 'INSERT INTO events (name,description,id_event_category,id_event_location,start_date,duration_in_minutes, price,enabled_for_enrollment,max-assitance,id_creator_user) VALUES ($1,$2,$3,$4,$5,$6,$7.$8,$9,$10)';
             const result = await client.query(sql, [entity.name,entity.description,entity.id_event_category,entity.id_event_location,entity.start_date,entity.duration_in_minutes,entity.price,entity.enabled_for_enrollment, entity.max-assitance,entityid_creator_user]);
             await client.end();
             success = true; 
@@ -30,16 +30,35 @@ export default class eventsRepository
         try
         {
             await client.connect();
-            const sql = 'UPDATE events SET name = $2, description = $3, id_event_category = $4, id_event_location = $5, start_date = $6, duration_in_minutes = $7, price= $8, enabled_for_enrollment = $9, max-assitance = $10, id_creator_user = $11 WHERE id = $1  ';
-            const result = await client.query(sql, [entity.id,entity.name,entity.description,entity.id_event_category,entity.id_event_location,entity.start_date,entity.duration_in_minutes,entity.price,entity.enabled_for_enrollment, entity.max-assitance,entity.id_creator_user]);
+            const sql = 'UPDATE events SET name = $2, description = $3, id_event_category = $4, id_event_location = $5, start_date = $6, duration_in_minutes = $7, price= $8, enabled_for_enrollment = $9, max_assistance = $10, id_creator_user = $11 WHERE id_creator_user = $1';
+            const result = await client.query(sql, [entity.id,entity.name,entity.description,entity.id_event_category,entity.id_event_location,entity.start_date,entity.duration_in_minutes,entity.price,entity.enabled_for_enrollment, entity.max_assistance,entity.id_creator_user]);
             await client.end();
-            success = true; 
+            return true;
         } 
         catch (error)
         {
-            console.log(error);
+                
+                return console.log(error);
         }
-        return result;
+        
+    }
+
+    obtenerCapacidadMaxima = async (id) =>
+    {
+        const client = new Client(DBConfig);
+        try
+        {
+            await client.connect();
+            const sql = 'SELECT max_capacity FROM event_locations INNER JOIN events ON event_locations.id_creator_user = events.id_creator_user WHERE event_locations.id_creator_user = $1; ';
+            const result = await client.query(sql, [id]);
+            await client.end();
+            return result;
+        } 
+        catch (error)
+        {
+                
+                return console.log(error);
+        }
     }
 
     deleteEvent = async (id) =>
