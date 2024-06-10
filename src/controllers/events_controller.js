@@ -3,6 +3,7 @@ import EventsService from '../services/events_service.js';
 import mdw from '../middelware/mdw.js';
 const router = Router();
 const svc = new EventsService();
+const MIDLEWARE = new mdw();
 
 router.get('', async (req,res) =>
 {
@@ -19,7 +20,7 @@ router.get('', async (req,res) =>
     }
 });
 
-router.post('', async (req,res) =>
+router.post('', MIDLEWARE.authMiddelware, async (req,res) =>
 {
     let cuerpo = req.body;
     cuerpo.id_creator_user = req.user.id;
