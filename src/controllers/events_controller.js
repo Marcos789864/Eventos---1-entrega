@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import EventsService from '../services/events_service.js';
+import mdw from '../middelware/mdw.js';
 const router = Router();
 const svc = new EventsService();
 
@@ -20,9 +21,11 @@ router.get('', async (req,res) =>
 
 router.post('', async (req,res) =>
 {
+    let cuerpo = req.body;
+    cuerpo.id_creator_user = req.user.id;
     try
     {
-        const events = await svc.updateEvent(req.body);
+        const events = await svc.createEvent(cuerpo);
         if (events == true) {
             return res.status(200).json("Creacion exitosa");
         } else {
@@ -31,6 +34,21 @@ router.post('', async (req,res) =>
     }catch{
         return res.status(500).send('Error interno.');
     }
+})
+
+router.put('',async (req,res) =>{
+    try
+    {
+        const events = await svc.updateEvent(req.body);
+        if (events == true) {
+            return res.status(200).json("Modificacion exitosa");
+        } else {
+            return res.status(500).send(events);
+        }
+    }catch{
+        return res.status(500).send('Error interno.');
+    }
+    
 })
 
 

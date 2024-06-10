@@ -11,16 +11,16 @@ export default class eventsRepository
         try
         {
             await client.connect();
-            const sql = 'INSERT INTO events (name,description,id_event_category,id_event_location,start_date,duration_in_minutes, price,enabled_for_enrollment,max-assitance,id_creator_user) VALUES ($1,$2,$3,$4,$5,$6,$7.$8,$9,$10)';
-            const result = await client.query(sql, [entity.name,entity.description,entity.id_event_category,entity.id_event_location,entity.start_date,entity.duration_in_minutes,entity.price,entity.enabled_for_enrollment, entity.max-assitance,entityid_creator_user]);
-            await client.end();
-            success = true; 
+            const sql = 'INSERT INTO events (name,description,id_event_category,id_event_location,start_date,duration_in_minutes, price,enabled_for_enrollment,max_assistance,id_creator_user) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)';
+            const result = await client.query(sql, [entity.name,entity.description,entity.id_event_category,entity.id_event_location,entity.start_date,entity.duration_in_minutes,entity.price,entity.enabled_for_enrollment, entity.max_assistance,entity.id_creator_user]);
+            await client.end(); 
+            return result;
         } 
         catch (error)
         {
-            console.log(error);
+            return  console.log(error);
         }
-        return result;
+        
     }
 
 
@@ -36,9 +36,8 @@ export default class eventsRepository
             return true;
         } 
         catch (error)
-        {
-                
-                return console.log(error);
+        { 
+            return console.log(error);
         }
         
     }
@@ -49,7 +48,7 @@ export default class eventsRepository
         try
         {
             await client.connect();
-            const sql = 'SELECT max_capacity FROM event_locations INNER JOIN events ON event_locations.id_creator_user = events.id_creator_user WHERE event_locations.id_creator_user = $1; ';
+            const sql = 'SELECT max_capacity FROM event_locations RIGHT JOIN events ON event_locations.id_creator_user = events.id_creator_user WHERE event_locations.id_creator_user = $1';
             const result = await client.query(sql, [id]);
             await client.end();
             return result;

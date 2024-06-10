@@ -34,12 +34,12 @@ export default class UserRepository
             const sql = 'INSERT INTO users (id,first_name, last_name, username, password) VALUES ($1,$2, $3, $4,$5)';
             const result = await client.query(sql, [user.id,user.first_name, user.last_name, user.username, user.password]);
             await client.end();
-            success = true; 
+            return result;
         }
         catch(error)
         {
-            console.log(error);
+            return console.log(error);
         }
-        return success;
+        
       };
 }

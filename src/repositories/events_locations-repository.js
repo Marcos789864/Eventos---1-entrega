@@ -22,6 +22,25 @@ export default class events_locations
         return result;
     }
 
+    getById = async (id) => 
+    {
+        let returnArray = null;
+        const client = new Client(DBConfig);
+        try
+        {
+            await client.connect();
+            const sql =  'SELECT * FROM event_locations where id = $1';
+            const result = await client.query(sql,[id]);
+            await client.end();
+            returnArray = result.rows;
+        }
+        catch(error)
+        {
+            console.log(error);
+        }
+        return returnArray;
+    }
+
     
 
 }

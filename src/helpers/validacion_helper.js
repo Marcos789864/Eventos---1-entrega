@@ -1,3 +1,4 @@
+
  export default class validacion
 {
      validarEmail = (email) => {
@@ -19,9 +20,10 @@
         }
     }
 
-    ValidarCreacionEvento(max_assistance,capacidadMax,price,duration_in_minutes)
+    ValidarCreacionEvento (max_assistance,CapacidadMax,price,duration_in_minutes) 
     {
-        if(max_assistance > capacidadMax)
+    
+        if(max_assistance > CapacidadMax)
         {
             return "La maxima asistencia no puede superar a la capacidad maxima";
         }

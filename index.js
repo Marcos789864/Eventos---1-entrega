@@ -13,4 +13,4 @@ app.use("/api/province",ProvinceRouter);
 app.use("/api/events",eventsRouter);
 app.use("/api/users",userRouter);
 
-app.listen(port,()=>{ console.log(`Exampleapplisteningonport${port}`)})
+app.listen(port,()=>{ console.log(`Exampleapplisteningonport${port}`)}) 

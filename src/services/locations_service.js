@@ -15,4 +15,7 @@ export default class ProvinceService
         const Location = await repo.getAllLocations();
         return Location;
     }
+
+    
+
 }
