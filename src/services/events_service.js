@@ -7,19 +7,20 @@ export default class EventsService
     createEvent = async (entity) => 
     {
         const repo = new eventLocationRepo();
+        const repo2 = new eventsRepository();
         const validar = new validacion();
-        const event_location = repo.getById(entity.id)
+        const event_location =  await repo.getById(entity.id_event_location)
         if(entity.name.length < 3 || entity.description.length < 3 )
         {
             return "El nombre o descripcion del evento debe tener una longitud superior a 3 ";
         }
-        else if(validar.ValidarCreacionEvento(entity.max_assistance,event_location.id,entity.price,entity.duration_in_minutes) != "Ok")
+        else if(validar.ValidarCreacionEvento(entity.max_assistance,event_location[0].max_capacity,entity.price,entity.duration_in_minutes) != "Ok")
         {
             return validar.ValidarCreacionEvento(entity.max_assistance,entity.max_capacity,entity.price,entity.duration_in_minutes);
         }
         else
         {
-            return await repo.createEvent(entity);
+            return await repo2.createEvent(entity);
         }
     }
 

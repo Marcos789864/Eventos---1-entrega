@@ -23,7 +23,6 @@ router.get('', async (req,res) =>
 router.post('', MIDLEWARE.authMiddelware, async (req,res) =>
 {
     let cuerpo = req.body;
-    cuerpo.id_creator_user = req.user.id;
     try
     {
         const events = await svc.createEvent(cuerpo);

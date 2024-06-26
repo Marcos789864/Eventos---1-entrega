@@ -22,8 +22,8 @@
 
     ValidarCreacionEvento (max_assistance,CapacidadMax,price,duration_in_minutes) 
     {
-    
-        if(max_assistance > CapacidadMax)
+        const capacida_max = parseInt(CapacidadMax);
+        if(max_assistance > capacida_max)
         {
             return "La maxima asistencia no puede superar a la capacidad maxima";
         }
