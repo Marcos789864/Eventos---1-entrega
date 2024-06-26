@@ -19,3 +19,18 @@ router.get('/:id/eventLocation', async (req,res) =>
     }
 
 });
+router.get('', async (req,res) =>
+{
+    try
+    {
+        const locations = await svc.getAllLocations();
+        if (locations != null) {
+            return res.status(200).json(locations);
+        } else {
+            return res.status(500).send('Error interno.');
+        }
+    }catch{
+        return res.status(500).send('Error interno.');
+    }
+});
+export default router
