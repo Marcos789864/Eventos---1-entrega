@@ -137,7 +137,7 @@ export default class eventsRepository
         } catch (error) {
             console.log(error);
         }
-    }    
+    }
     
     getEventDetail = async (id) => {
         const client = new Client(DBConfig);

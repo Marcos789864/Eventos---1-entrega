@@ -20,85 +20,58 @@ export default class events_enrollments
         }
         return result;
     }
-    getUserFromEventByName = async (name) =>
-    {
+    
+    async getUserFromEvent(query) {
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'SELECT * FROM users INNER JOIN event_enrollments ON users.id = event_enrollments.id_user INNER JOIN events ON event_enrollments.id_event = events.id WHERE users.first_name = $1';
-            const result = await client.query(sql, [name]);
-            if (result.rowCount > 0) {
-                success = true;
+
+            let sql = `
+                SELECT users.*, events.*, event_enrollments.*
+                FROM users
+                INNER JOIN event_enrollments ON users.id = event_enrollments.id_user
+                INNER JOIN events ON event_enrollments.id_event = events.id
+                WHERE event_enrollments.id_event = $1
+            `;
+
+            const queryParams = [query.eventId];
+
+            if (query.first_name) {
+                sql += ' AND lower(users.first_name) = lower($' + (queryParams.length + 1) + ')';
+                queryParams.push(query.first_name);
             }
+
+            if (query.last_name) {
+                sql += ' AND lower(users.last_name) = lower($' + (queryParams.length + 1) + ')';
+                queryParams.push(query.last_name);
+            }
+
+            if (query.username) {
+                sql += ' AND lower(users.username) = lower($' + (queryParams.length + 1) + ')';
+                queryParams.push(query.username);
+            }
+
+            if (query.attended !== undefined) {
+                sql += ' AND event_enrollments.attended = $' + (queryParams.length + 1);
+                queryParams.push(query.attended);
+            }
+
+            if (query.rating) {
+                sql += ' AND event_enrollments.rating >= $' + (queryParams.length + 1);
+                queryParams.push(query.rating);
+            }
+
+            const result = await client.query(sql, queryParams);
             await client.end();
-        } catch (error) {
-           console.log(error);
-        }
-        return result;
-    }
-    getUserFromEventByLastName = async (last_name) =>
-    {
-        const client = new Client(DBConfig);
-        try {
-            await client.connect();
-            const sql = 'SELECT * FROM users INNER JOIN event_enrollments ON users.id = event_enrollments.id_user INNER JOIN events ON event_enrollments.id_event = events.id WHERE users.last_name = $1';
-            const result = await client.query(sql, [last_name]);
-            if (result.rowCount > 0) {
-                success = true;            }
-            await client.end();
+            return result.rows;
+
         } catch (error) {
             console.log(error);
-        }
-        return result;
-    }
-    getUserFromEventByUsername = async (username) =>
-    {
-        const client = new Client(DBConfig);
-        try {
-            await client.connect();
-            const sql = 'SELECT * FROM users INNER JOIN event_enrollments ON users.id = event_enrollments.id_user INNER JOIN events ON event_enrollments.id_event = events.id WHERE users.username = $1';
-            const result = await client.query(sql, [username]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
             await client.end();
-        } catch (error) {
-            console.log(error);
+            throw error; // Re-throw the error to be handled by the calling function
         }
-        return result;
     }
-    getUserFromEventByAttendance = async (attended) =>
-    {
-        const client = new Client(DBConfig);
-        try {
-            await client.connect();
-            const sql = 'SELECT * FROM users INNER JOIN event_enrollments ON users.id = event_enrollments.id_user WHERE event_enrollments.attended = $1';
-            const result = await client.query(sql, [attended]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
-            await client.end();
-        } catch (error) {
-            console.log(error);
-        }
-        return result;
-    }
-    getUserFromEventByRating = async (rate) =>
-    {
-        const client = new Client(DBConfig);
-        try {
-            await client.connect();
-            const sql = 'SELECT * FROM users INNER JOIN event_enrollments ON users.id = event_enrollments.id_user WHERE event_enrollments.rating = $1';
-            const result = await client.query(sql, [rate]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
-            await client.end();
-        } catch (error) {
-            console.log(error);
-        }
-        return result;
-    }
+
     updateEventRatingById = async (entity) =>
     {
         const client = new Client(DBConfig);
@@ -115,6 +88,7 @@ export default class events_enrollments
         }
         return result;
     }
+    
     createEnrollment = async (entity) =>
     {
         const client = new Client(DBConfig);
