@@ -1,26 +1,25 @@
 import {Router} from 'express';
-import ProvinceService from '../services/province_service.js';
+import ProvinceService from '../services/provinces_service.js';
 const router = Router();
 const svc = new ProvinceService();
 
 //Ejercicio 7 Start
 router.get('', async (req, res) => {
     try {
-        const returnArray = await svc.getAllAsync();
+        const returnArray = await svc.getAllProvinces();
         if (returnArray != null) {
             return res.status(200).json(returnArray);
         } else {
             return res.status(500).send('Error interno.');
         }
     } catch (error) {
-        LogHelper.logError(error);
         return res.status(500).send('Error interno.');
     }
 });
 
 router.get('/:id', async (req, res) => {
     try {
-        const province = await svc.getByIdAsync(req.params.id);
+        const province = await svc.getById(req.params.id);
         if (province != null) {
             return res.status(200).json(province);
         } else {
@@ -35,7 +34,7 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/locations', async (req,res) =>
 {
     try {
-        const province = await svc.getLocationsByIdProvince(req.params.id);
+        const province = await svc.getLocationsById(req.params.id);
         if (province != null) {
             return res.status(200).json(province);
         } else {
@@ -49,14 +48,18 @@ router.get('/:id/locations', async (req,res) =>
 
 router.post('', async (req, res) => {
     try {
-        const province = await svc.createAsync(req.body);
-        if (province != null) {
+        console.log(req.body);
+        if (req.body.name.length < 3) {
+            return res.status(400).send('Nombre vacio o menos de 3 letras.')
+        } 
+        else if(!Number.parseFloat(req.body.latitude) || !Number.parseFloat(req.body.longitude)){
+            return res.status(400).send('Latitud o Longitud no son numeros.')
+        }
+        else {
+            const province = await svc.postProvince(req.body);
             return res.status(200).json(province);
-        } else {
-            return res.status(500).send('Error interno.');
         }
     } catch (error) {
-        LogHelper.logError(error);
         return res.status(500).send('Error interno.');
     }
 });
@@ -90,4 +93,4 @@ router.delete('/:id', async (req, res) => {
 });
 //Ejercicio 7 End
 
-export default  router
+export default router

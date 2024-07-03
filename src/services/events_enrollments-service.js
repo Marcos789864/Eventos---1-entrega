@@ -1,4 +1,4 @@
-import events_enrollmentRepository from '../repositories/event_enrollments-repository.js';
+import events_enrollmentRepository from '../repositories/events_enrollments-repository.js';
 
 export default class events_enrollmentsService
 {

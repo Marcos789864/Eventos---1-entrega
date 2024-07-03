@@ -144,17 +144,35 @@ export default class eventsRepository
         try {
             await client.connect();
             const sql = `
-            SELECT events.*, 
-                   event_categories.name AS category_name, 
-                   event_location.*, 
-                   locations.*, 
-                   provinces.*
+            SELECT events.*,
+                   event_categories.name AS category_name,
+                   event_locations.id AS event_location_id,
+                   event_locations.full_address,
+                   event_locations.max_capacity,
+                   event_locations.latitude AS event_location_latitude,
+                   event_locations.longitude AS event_location_longitude,
+                   locations.id AS location_id,
+                   locations.name AS location_name,
+                   locations.latitude AS location_latitude,
+                   locations.longitude AS location_longitude,
+                   provinces.id AS province_id,
+                   provinces.name AS province_name,
+                   users.id AS creator_user_id,
+                   users.username AS creator_username,
+                   users.first_name AS creator_first_name,
+                   users.last_name AS creator_last_name,
+                   array_agg(tags.name) AS tags
             FROM events
             LEFT JOIN event_categories ON events.id_event_category = event_categories.id
-            LEFT JOIN event_locations ON events.id_event_locations = event_locations.id
-            LEFT JOIN locations ON event_locations.id_locations = locations.id
+            LEFT JOIN event_locations ON events.id_event_location = event_locations.id
+            LEFT JOIN locations ON event_locations.id_location = locations.id
             LEFT JOIN provinces ON locations.id_province = provinces.id
-            WHERE events.id = $1`;
+            LEFT JOIN users ON events.id_creator_user = users.id
+            LEFT JOIN event_tags ON events.id = event_tags.id_event
+            LEFT JOIN tags ON event_tags.id_tag = tags.id
+            WHERE events.id = $1
+            GROUP BY events.id, event_categories.id, event_locations.id, locations.id, provinces.id, users.id`;
+    
             
             const result = await client.query(sql, [id]);
             if (result.rowCount > 0) {

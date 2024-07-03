@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import userRepository from '../repositories/user_repository.js'
+import userRepository from '../repositories/users_repository.js'
 
 
 export default class MWD

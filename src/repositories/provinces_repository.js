@@ -12,8 +12,8 @@ export default class ProvinceRepository{
             await client.connect();
             const sql =  'SELECT * FROM provinces';
             const result = await client.query(sql);
-            await client.end();
             returnArray = result.rows;
+            await client.end();
         }
         catch(error)
         {
@@ -22,7 +22,7 @@ export default class ProvinceRepository{
         return returnArray;
     }
 
-    getProvincesById = async (id) => 
+    getById = async (id) => 
     {
         let returnArray = null;
         const client = new Client(DBConfig);
@@ -41,24 +41,39 @@ export default class ProvinceRepository{
         return returnArray;
     }
 
-
-        
-    createProvince = async (entity) => 
+    getLocationsById = async (id) =>
     {
-        let success = false;
+        let returnArray = null;
+        const client = new Client(DBConfig);
+        try
+        {
+            await client.connect();
+            const sql = 'SELECT * FROM locations where id_province = $1'
+            const result = await client.query(sql,[id])
+            await client.end();
+            returnArray = result.rows
+        }
+        catch(error)
+        {
+            console.log(error)
+        }
+        return returnArray;
+    }
+        
+    postProvince = async (entity) => 
+    {
         const client = new Client(DBConfig);
         try {
             await client.connect();
             const sql = 'INSERT INTO provinces (name,full_name,latitude,longitude,display_order) VALUES ($1,$2,$3,$4,$5)';
             const result = await client.query(sql, [entity.name,entity.full_name,entity.latitude,entity.longitude,entity.display_order]);
             await client.end();
-            success = true; 
         }
         catch(error)
         {
             console.log(error);
         }
-        return success;
+        return result;
     }
 
     updateProvince = async (entity) => 

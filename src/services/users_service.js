@@ -1,4 +1,4 @@
-import UserRepository from "../repositories/user_repository.js";
+import UserRepository from "../repositories/users_repository.js";
 import jwt from 'jsonwebtoken'
 import validacion from "../helpers/validacion_helper.js";
 const validar = new validacion();

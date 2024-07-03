@@ -25,7 +25,7 @@ router.get('', async (req,res) =>
 });
 
 //Ejercicio 3
-router.get('/params/', async (req, res) => {
+router.get('', async (req, res) => {
     try {
         const query = req.query;
 
@@ -34,7 +34,7 @@ router.get('/params/', async (req, res) => {
         if (events != null) {
             return res.status(200).json(events);
         } else {
-            return res.status(500).send('Error interno.');
+            return res.status(404).send('No se encontro el evento');
         }
     } catch (error) {
         console.error(error);
@@ -53,7 +53,7 @@ router.get('/:id', async (req, res) => {
         if (event != null) {
             return res.status(200).json(event);
         } else {
-            return res.status(500).send('Error interno.');
+            return res.status(404).send('Id Inexistente.');
         }
     } catch (error) {
         console.error(error);

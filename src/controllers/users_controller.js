@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import UserService from '../services/user_service.js';
+import UserService from '../services/users_service.js';
 import mdw from '../middelware/mdw.js';
 const router = Router();
 const svc = new UserService();
