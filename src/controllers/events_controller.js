@@ -90,21 +90,21 @@ router.get('/:id/enrollment', async (req, res) => {
 //Ejercicio 8 Start
 router.post('', MIDLEWARE.authMiddelware, async (req,res) =>
 {
-    let cuerpo = req.body;
+    let event = req.body;
     try
     {
-        const events = await svc.createEvent(cuerpo);
+        const events = await svc.createEvent(event);
         if (events == true) {
-            return res.status(200).json("Creacion exitosa");
+            return res.status(201).json("Created");
         } else {
-            return res.status(500).send(events);
+            return res.status(400).send(events);
         }
     }catch{
         return res.status(500).send('Error interno.');
     }
 })
 
-router.put('',async (req,res) =>{
+router.put('', MIDLEWARE.authMiddelware, async (req,res) =>{
     try
     {
         const events = await svc.updateEvent(req.body);
@@ -119,7 +119,7 @@ router.put('',async (req,res) =>{
     
 })
 
-router.delete('/:id',async (req,res) =>{
+router.delete('/:id', MIDLEWARE.authMiddelware, async (req,res) =>{
     try
     {
         const events = await svc.deleteEvent(req.params.id);

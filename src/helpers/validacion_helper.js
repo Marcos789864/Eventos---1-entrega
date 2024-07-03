@@ -22,16 +22,16 @@
 
     ValidarCreacionEvento (max_assistance,CapacidadMax,price,duration_in_minutes) 
     {
-        const capacida_max = parseInt(CapacidadMax);
-        if(max_assistance > capacida_max)
+        const capacidad_max = parseInt(CapacidadMax);
+        if(max_assistance > capacidad_max)
         {
-            return "La maxima asistencia no puede superar a la capacidad maxima";
+            return "La asistencia maxima no puede superar a la capacidad maxima";
         }
-        else if (price < 0 && duration_in_minutes < 0)
+        else if (price < 0 || duration_in_minutes < 0)
         {
-            return "El precio y la duracion en minutos debe ser mayor o igual a cero";
+            return "El precio o la duracion en minutos deben ser mayor o igual a cero";
         }                           
-        return "Ok";
+        return true;
     }
 
     ValidarInscripcionEvento(max_assistance,max_capacity,start_date)
