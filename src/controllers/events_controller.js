@@ -87,6 +87,7 @@ router.get('/:id/enrollment', async (req, res) => {
     }
 });
 
+//Ejercicio 8 Start
 router.post('', MIDLEWARE.authMiddelware, async (req,res) =>
 {
     let cuerpo = req.body;
@@ -117,5 +118,21 @@ router.put('',async (req,res) =>{
     }
     
 })
+
+router.delete('/:id',async (req,res) =>{
+    try
+    {
+        const events = await svc.deleteEvent(req.params.id);
+        if (events == true) {
+            return res.status(200).json(events);
+        } else {
+            return res.status(404).send(events);
+        }
+    }catch{
+        return res.status(500).send('Error interno.');
+    }
+    
+})
+//Ejercicio 8 End
 
 export default router

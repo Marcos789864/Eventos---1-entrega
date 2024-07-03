@@ -35,7 +35,7 @@ export default class UserService
         }
         else
         {
-            return "No existe el usuario";
+            return "Usuario o clave invalida.";
         }
     };
 

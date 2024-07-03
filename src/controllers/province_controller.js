@@ -3,7 +3,7 @@ import ProvinceService from '../services/province_service.js';
 const router = Router();
 const svc = new ProvinceService();
 
-
+//Ejercicio 7 Start
 router.get('', async (req, res) => {
     try {
         const returnArray = await svc.getAllAsync();
@@ -73,6 +73,7 @@ router.delete('/:id', async (req, res) => {
         return res.status(500).send('Error interno.');
     }
 });
+//Ejercicio 7 End
 
 router.get('/:id/locations', async (req,res) =>
 {
