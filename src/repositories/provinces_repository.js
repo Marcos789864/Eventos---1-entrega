@@ -63,10 +63,11 @@ export default class ProvinceRepository{
     postProvince = async (entity) => 
     {
         const client = new Client(DBConfig);
+        let result;
         try {
             await client.connect();
             const sql = 'INSERT INTO provinces (name,full_name,latitude,longitude,display_order) VALUES ($1,$2,$3,$4,$5)';
-            const result = await client.query(sql, [entity.name,entity.full_name,entity.latitude,entity.longitude,entity.display_order]);
+            result = await client.query(sql, [entity.name,entity.full_name,entity.latitude,entity.longitude,entity.display_order]);
             await client.end();
         }
         catch(error)
@@ -76,14 +77,14 @@ export default class ProvinceRepository{
         return result;
     }
 
-    updateProvince = async (entity) => 
+    putProvince = async (entity) => 
     {
         let success = false;
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'UPDATE provinces SET name = $2, full_name = $3, latitude= $4, longitude = $5, display_order = $6     WHERE id = $1';
-            const result = await client.query(sql, [entity.id, entity.name,entity.full_name,entity.latitude,entity.longitude,entity.display_order]);
+            const sql = 'UPDATE provinces SET name = $2, full_name = $3, latitude= $4, longitude = $5, display_order = $6 WHERE id = $1';
+            await client.query(sql, [entity.id, entity.name,entity.full_name,entity.latitude,entity.longitude,entity.display_order]);
             await client.end();
             success = true; 
         }
@@ -91,26 +92,24 @@ export default class ProvinceRepository{
         {
             console.log(error);
         }
+        return success;
     }
 
-    deleteProvinceById = async (id) => 
+    deleteProvince = async (id) => 
     {
-        let success = false;
+        let result;
+        let rowCount= 0;
         const client = new Client(DBConfig);
         try {
             await client.connect();
             const sql = 'DELETE FROM provinces WHERE id = $1';
-
-            const result = await client.query(sql, [id]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
-            
+            result = await client.query(sql, [id]);
             await client.end();
+            rowCount = result.rowCount;
         } catch (error) {
             console.log(error);
         }
-        return success;
+        return rowCount;
     }
 }
 

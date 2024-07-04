@@ -3,43 +3,53 @@ import pkg from 'pg'
 const {Client, Pool } = pkg;
 
 export default class eventsRepository
-{
-
-    createEvent = async (entity) =>
-    {
-        const client = new Client(DBConfig);
-        try
-        {
-            await client.connect();
-            const sql = 'INSERT INTO events (name,description,id_event_category,id_event_location,start_date,duration_in_minutes, price,enabled_for_enrollment,max_assistance,id_creator_user) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)';
-            const result = await client.query(sql, [entity.name,entity.description,entity.id_event_category,entity.id_event_location,entity.start_date,entity.duration_in_minutes,entity.price,entity.enabled_for_enrollment, entity.max_assistance,entity.id_creator_user]);
-            await client.end(); 
-            return true;
-        } 
-        catch (error)
-        {
-            return  console.log(error);
+{   
+    async createEvent(eventData) {
+        const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = eventData;
+        try {
+            const sql = 'INSERT INTO events (name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id';
+            const params = [name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user];
+            const result = await this.client.query(sql, params);
+            return result.rows[0].id;
+        } catch (error) {
+            console.error('Error en createEvent:', error);
+            throw new Error('Error al crear el evento en la base de datos.');
         }
-        
     }
 
-
-    updateEvent = async (entity) =>
-    {
-        const client = new Client(DBConfig);
-        try
-        {
-            await client.connect();
-            const sql = 'UPDATE events SET name = $2, description = $3, id_event_category = $4, id_event_location = $5, start_date = $6, duration_in_minutes = $7, price= $8, enabled_for_enrollment = $9, max_assistance = $10, id_creator_user = $11 WHERE id_creator_user = $1';
-            const result = await client.query(sql, [entity.id,entity.name,entity.description,entity.id_event_category,entity.id_event_location,entity.start_date,entity.duration_in_minutes,entity.price,entity.enabled_for_enrollment, entity.max_assistance,entity.id_creator_user]);
-            await client.end();
+    async updateEvent(eventData) {
+        const { id, name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = eventData;
+        try {
+            const sql = 'UPDATE events SET name = $2, description = $3, id_event_category = $4, id_event_location = $5, start_date = $6, duration_in_minutes = $7, price = $8, enabled_for_enrollment = $9, max_assistance = $10 WHERE id = $1';
+            const params = [id, name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance];
+            await this.client.query(sql, params);
             return true;
-        } 
-        catch (error)
-        { 
-            return console.log(error);
+        } catch (error) {
+            console.error('Error en updateEvent:', error);
+            throw new Error('Error al actualizar el evento en la base de datos.');
         }
-        
+    }
+
+    async deleteEvent(eventId) {
+        try {
+            const sql = 'DELETE FROM events WHERE id = $1';
+            const result = await this.client.query(sql, [eventId]);
+            return result.rowCount > 0;
+        } catch (error) {
+            console.error('Error en deleteEvent:', error);
+            throw new Error('Error al eliminar el evento en la base de datos.');
+        }
+    }
+
+    async getEventById(eventId) {
+        try {
+            const sql = 'SELECT * FROM events WHERE id = $1';
+            const result = await this.client.query(sql, [eventId]);
+            return result.rows[0];
+        } catch (error) {
+            console.error('Error en getEventById:', error);
+            throw new Error('Error al obtener el evento desde la base de datos.');
+        }
     }
 
     obtenerCapacidadMaxima = async (id) =>
@@ -59,26 +69,6 @@ export default class eventsRepository
                 return console.log(error);
         }
     }
-
-    deleteEvent = async (id) =>
-    {
-        let success = false;
-        const client = new Client(DBConfig);
-        try {
-        await client.connect();
-        const sql = 'DELETE FROM events WHERE id = $1';
-
-        const result = await client.query(sql, [id]);
-        if (result.rowCount > 0) {
-            success = true;
-        }
-        await client.end();
-    } catch (error) {
-        console.log(error);
-    }
-    return success;
-    }
-
 
     getEvents = async () =>
     {

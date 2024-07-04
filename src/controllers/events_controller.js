@@ -88,51 +88,54 @@ router.get('/:id/enrollment', async (req, res) => {
 });
 
 //Ejercicio 8 Start
-router.post('', MIDLEWARE.authMiddelware, async (req,res) =>
-{
-    let event = req.body;
-    try
-    {
-        const events = await svc.createEvent(event);
-        if (events == true) {
-            return res.status(201).json("Created");
+// POST /api/event/
+router.post('/', Middleware.authMiddleware, async (req, res) => {
+    try {
+        const createdEvent = await svc.createEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
+        if (createdEvent.success) {
+            return res.status(201).json(createdEvent);
         } else {
-            return res.status(400).send(events);
+            return res.status(400).json(createdEvent);
         }
-    }catch{
+    } catch (error) {
+        console.error('Error en POST /api/event/', error);
         return res.status(500).send('Error interno.');
     }
-})
+});
 
-router.put('', MIDLEWARE.authMiddelware, async (req,res) =>{
-    try
-    {
-        const events = await svc.updateEvent(req.body);
-        if (events == true) {
-            return res.status(200).json("Modificacion exitosa");
+// PUT /api/event/
+router.put('/', Middleware.authMiddleware, async (req, res) => {
+    try {
+        const updatedEvent = await svc.updateEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
+        if (updatedEvent.success) {
+            return res.status(200).json(updatedEvent);
+        } else if (updatedEvent.statusCode === 401) {
+            return res.status(401).send(updatedEvent.message);
         } else {
-            return res.status(500).send(events);
+            return res.status(400).send(updatedEvent.message);
         }
-    }catch{
+    } catch (error) {
+        console.error('Error en PUT /api/event/', error);
         return res.status(500).send('Error interno.');
     }
-    
-})
+});
 
-router.delete('/:id', MIDLEWARE.authMiddelware, async (req,res) =>{
-    try
-    {
-        const events = await svc.deleteEvent(req.params.id);
-        if (events == true) {
-            return res.status(200).json(events);
+// DELETE /api/event/:id
+router.delete('/:id', Middleware.authMiddleware, async (req, res) => {
+    try {
+        const deletedEvent = await svc.deleteEvent(req.params.id, req.user.id); // Se pasa el ID del usuario autenticado
+        if (deletedEvent.success) {
+            return res.status(200).json(deletedEvent);
+        } else if (deletedEvent.statusCode === 401) {
+            return res.status(401).send(deletedEvent.message);
         } else {
-            return res.status(404).send(events);
+            return res.status(404).send(deletedEvent.message);
         }
-    }catch{
+    } catch (error) {
+        console.error('Error en DELETE /api/event/:id', error);
         return res.status(500).send('Error interno.');
     }
-    
-})
+});
 //Ejercicio 8 End
 
 export default router

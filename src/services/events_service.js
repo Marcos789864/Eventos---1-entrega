@@ -5,37 +5,102 @@ const validar = new validacion();
 
 export default class EventsService
 {
-    createEvent = async (entity) => 
-    {
-        const repo = new eventLocationRepository();
-        const repo2 = new eventsRepository();
-        const event_location =  await repo.getById(entity.id_event_location)
-        if(entity.name.length < 3 || entity.description.length < 3 )
-        {
-            return "El nombre o descripcion del evento debe tener una longitud superior a 3 ";
+    async createEvent(eventData, userId) {
+        const { name, description, id_event_location, max_assistance, price, duration_in_minutes } = eventData;
+
+        if (!name || name.length < 3 || !description || description.length < 3) {
+            return { success: false, message: "El nombre y la descripción deben tener al menos 3 caracteres." };
         }
-        else if(validar.ValidarCreacionEvento(entity.max_assistance,event_location[0].max_capacity,entity.price,entity.duration_in_minutes) != true)
-        {
-            return validar.ValidarCreacionEvento(entity.max_assistance,entity.max_capacity,entity.price,entity.duration_in_minutes);
+
+        const maxCapacity = await this.eventsRepository.getMaxCapacity(id_event_location);
+        if (max_assistance > maxCapacity) {
+            return { success: false, message: "El máximo de asistentes supera la capacidad máxima del lugar del evento." };
         }
-        else
-        {
-            await repo2.createEvent(entity);
-            return true;
+
+        if (price < 0 || duration_in_minutes < 0) {
+            return { success: false, message: "El precio y la duración deben ser mayores o iguales a cero." };
+        }
+
+        try {
+            const eventId = await this.eventsRepository.createEvent({
+                ...eventData,
+                id_creator_user: userId
+            });
+            return { success: true, message: "Evento creado exitosamente.", eventId };
+        } catch (error) {
+            console.error('Error en createEvent:', error);
+            return { success: false, message: "Error al crear el evento." };
         }
     }
 
-    updateEvent = async (entity) =>
-    {
-        const repo = new eventsRepository();
-        const capacidadMax = await repo.obtenerCapacidadMaxima(entity.id);
+    async updateEvent(eventData, userId) {
+        const { id, name, description, id_event_location, max_assistance, price, duration_in_minutes } = eventData;
+
+        if (!name || name.length < 3 || !description || description.length < 3) {
+            return { success: false, message: "El nombre y la descripción deben tener al menos 3 caracteres." };
+        }
+
+        const currentEvent = await this.eventsRepository.getEventById(id);
+        if (!currentEvent) {
+            return { success: false, statusCode: 404, message: "El evento no existe." };
+        }
+
+        if (currentEvent.id_creator_user !== userId) {
+            return { success: false, statusCode: 401, message: "No tienes permiso para modificar este evento." };
+        }
+
+        const maxCapacity = await this.eventsRepository.getMaxCapacity(id_event_location);
+        if (max_assistance > maxCapacity) {
+            return { success: false, message: "El máximo de asistentes supera la capacidad máxima del lugar del evento." };
+        }
+
+        if (price < 0 || duration_in_minutes < 0) {
+            return { success: false, message: "El precio y la duración deben ser mayores o iguales a cero." };
+        }
+
+        try {
+            await this.eventsRepository.updateEvent({
+                id,
+                name,
+                description,
+                id_event_location,
+                max_assistance,
+                price,
+                duration_in_minutes
+            });
+            return { success: true, message: "Evento actualizado exitosamente." };
+        } catch (error) {
+            console.error('Error en updateEvent:', error);
+            return { success: false, message: "Error al actualizar el evento." };
+        }
     }
 
-    deleteEvent = async (id) =>
-    {
-        const repo = new eventsRepository();
-        const Events = await repo.updateEvent(id);
-        return Events;
+    async deleteEvent(eventId, userId) {
+        const currentEvent = await this.eventsRepository.getEventById(eventId);
+        if (!currentEvent) {
+            return { success: false, statusCode: 404, message: "El evento no existe." };
+        }
+
+        if (currentEvent.id_creator_user !== userId) {
+            return { success: false, statusCode: 401, message: "No tienes permiso para eliminar este evento." };
+        }
+
+        const usersRegistered = await this.eventsRepository.getUsersRegisteredCount(eventId);
+        if (usersRegistered > 0) {
+            return { success: false, message: "No se puede eliminar el evento porque hay usuarios registrados." };
+        }
+
+        try {
+            const deleted = await this.eventsRepository.deleteEvent(eventId);
+            if (deleted) {
+                return { success: true, message: "Evento eliminado exitosamente." };
+            } else {
+                return { success: false, statusCode: 404, message: "No se encontró el evento para eliminar." };
+            }
+        } catch (error) {
+            console.error('Error en deleteEvent:', error);
+            return { success: false, message: "Error al eliminar el evento." };
+        }
     }
 
     getEvents = async () =>
