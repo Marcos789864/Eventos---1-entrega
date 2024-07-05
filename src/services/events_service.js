@@ -6,13 +6,14 @@ const validar = new validacion();
 export default class EventsService
 {
     async createEvent(eventData, userId) {
+        const repo = new eventsRepository ();
         const { name, description, id_event_location, max_assistance, price, duration_in_minutes } = eventData;
 
         if (!name || name.length < 3 || !description || description.length < 3) {
             return { success: false, message: "El nombre y la descripción deben tener al menos 3 caracteres." };
         }
 
-        const maxCapacity = await this.eventsRepository.getMaxCapacity(id_event_location);
+        const maxCapacity = await repo.getMaxCapacity(id_event_location);
         if (max_assistance > maxCapacity) {
             return { success: false, message: "El máximo de asistentes supera la capacidad máxima del lugar del evento." };
         }
@@ -22,7 +23,7 @@ export default class EventsService
         }
 
         try {
-            const eventId = await this.eventsRepository.createEvent({
+            const eventId = await repo.createEvent({
                 ...eventData,
                 id_creator_user: userId
             });
@@ -34,13 +35,14 @@ export default class EventsService
     }
 
     async updateEvent(eventData, userId) {
+        const repo = new eventsRepository ();
         const { id, name, description, id_event_location, max_assistance, price, duration_in_minutes } = eventData;
 
         if (!name || name.length < 3 || !description || description.length < 3) {
             return { success: false, message: "El nombre y la descripción deben tener al menos 3 caracteres." };
         }
 
-        const currentEvent = await this.eventsRepository.getEventById(id);
+        const currentEvent = await repo.getEventById(id);
         if (!currentEvent) {
             return { success: false, statusCode: 404, message: "El evento no existe." };
         }
@@ -49,7 +51,7 @@ export default class EventsService
             return { success: false, statusCode: 401, message: "No tienes permiso para modificar este evento." };
         }
 
-        const maxCapacity = await this.eventsRepository.getMaxCapacity(id_event_location);
+        const maxCapacity = await repo.getMaxCapacity(id_event_location);
         if (max_assistance > maxCapacity) {
             return { success: false, message: "El máximo de asistentes supera la capacidad máxima del lugar del evento." };
         }
@@ -59,7 +61,7 @@ export default class EventsService
         }
 
         try {
-            await this.eventsRepository.updateEvent({
+            await repo.updateEvent({
                 id,
                 name,
                 description,
@@ -76,22 +78,23 @@ export default class EventsService
     }
 
     async deleteEvent(eventId, userId) {
-        const currentEvent = await this.eventsRepository.getEventById(eventId);
+        const repo = new eventsRepository ();
+        const currentEvent = await repo.getEventById(eventId);
         if (!currentEvent) {
             return { success: false, statusCode: 404, message: "El evento no existe." };
         }
 
-        if (currentEvent.id_creator_user !== userId) {
+        if (currentEvent.id_creator_user != userId) {
             return { success: false, statusCode: 401, message: "No tienes permiso para eliminar este evento." };
         }
 
-        const usersRegistered = await this.eventsRepository.getUsersRegisteredCount(eventId);
-        if (usersRegistered > 0) {
+        const usersRegistered = await repo.getUsersRegisteredCount(eventId);
+        if (usersRegistered == null) {
             return { success: false, message: "No se puede eliminar el evento porque hay usuarios registrados." };
         }
 
         try {
-            const deleted = await this.eventsRepository.deleteEvent(eventId);
+            const deleted = await repo.deleteEvent(eventId);
             if (deleted) {
                 return { success: true, message: "Evento eliminado exitosamente." };
             } else {

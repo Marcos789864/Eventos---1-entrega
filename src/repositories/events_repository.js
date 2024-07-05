@@ -4,53 +4,86 @@ const {Client, Pool } = pkg;
 
 export default class eventsRepository
 {   
-    async createEvent(eventData) {
+    createEvent = async (eventData) => {
+        const client = new Client(DBConfig);
         const { name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = eventData;
         try {
+            await client.connect();
             const sql = 'INSERT INTO events (name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id';
             const params = [name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user];
-            const result = await this.client.query(sql, params);
+            const result = await client.query(sql, params);
             return result.rows[0].id;
         } catch (error) {
             console.error('Error en createEvent:', error);
             throw new Error('Error al crear el evento en la base de datos.');
+        } finally {
+            await client.end();
         }
     }
-
-    async updateEvent(eventData) {
+    
+    updateEvent= async (eventData) => {
+        const client = new Client(DBConfig);
         const { id, name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = eventData;
         try {
+            await client.connect();
             const sql = 'UPDATE events SET name = $2, description = $3, id_event_category = $4, id_event_location = $5, start_date = $6, duration_in_minutes = $7, price = $8, enabled_for_enrollment = $9, max_assistance = $10 WHERE id = $1';
             const params = [id, name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance];
-            await this.client.query(sql, params);
+            await client.query(sql, params);
             return true;
         } catch (error) {
             console.error('Error en updateEvent:', error);
             throw new Error('Error al actualizar el evento en la base de datos.');
+        } finally {
+            await client.end();
         }
     }
-
-    async deleteEvent(eventId) {
+    
+    deleteEvent = async (eventId) => {
+        const client = new Client(DBConfig);
         try {
-            const sql = 'DELETE FROM events WHERE id = $1';
-            const result = await this.client.query(sql, [eventId]);
+            await client.connect();
+            const sql = 'DELETE * FROM events WHERE id = $1';
+            const result = await client.query(sql, [eventId]);
             return result.rowCount > 0;
         } catch (error) {
             console.error('Error en deleteEvent:', error);
             throw new Error('Error al eliminar el evento en la base de datos.');
+        } finally {
+            await client.end();
         }
     }
 
+    getUsersRegisteredCount = async (eventId) => {
+        const client = new Client(DBConfig);
+        try {
+            const sql = `SELECT *
+            FROM event_enrollments
+            WHERE id_event = $1`;
+            const result = await client.query(sql, [eventId]);
+            return result.rows[0];
+        } 
+        catch (error) {
+            console.error('Error en getUsersRegisteredCount:', error);
+            throw new Error('Error al obtener los usuarios registrados en el evneto de la base de datos.');
+        }
+        finally {
+            await client.end();
+        }
+    }
 
-
-    async getEventById(eventId) {
+    getEventById = async (eventId) => {
+        const client = new Client(DBConfig);
         try {
             const sql = 'SELECT * FROM events WHERE id = $1';
-            const result = await this.client.query(sql, [eventId]);
+            const result = await client.query(sql, [eventId]);
             return result.rows[0];
-        } catch (error) {
+        } 
+        catch (error) {
             console.error('Error en getEventById:', error);
             throw new Error('Error al obtener el evento desde la base de datos.');
+        }
+        finally {
+            await client.end();
         }
     }
 
