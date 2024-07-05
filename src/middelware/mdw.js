@@ -7,10 +7,16 @@ export default class MWD
 
     authMiddelware = async (req,res,next) =>
         {
+            let token = req.headers.authorization;
+            console.log('token',token);
+
             try
             {
-                let noBearer = req.headers.authorization.slice(7)
-                 let payload = await jwt.verify(noBearer,'ChinoMarcos');
+                
+                let noBearer = token.slice(7)
+                let payload = await jwt.verify(noBearer,'ChinoMarcos');
+                console.log(payload, "funciona");
+                req.user = payload;
                 if(payload != null){
                     next();
                 }

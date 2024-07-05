@@ -41,6 +41,8 @@ export default class eventsRepository
         }
     }
 
+
+
     async getEventById(eventId) {
         try {
             const sql = 'SELECT * FROM events WHERE id = $1';
@@ -51,6 +53,32 @@ export default class eventsRepository
             throw new Error('Error al obtener el evento desde la base de datos.');
         }
     }
+
+    getMaxCapacity = async (id_event_location) => {
+        const client = new Client(DBConfig);
+        try {
+            await client.connect();
+    
+            const sql = `
+                SELECT max_capacity
+                FROM event_locations
+                WHERE id = $1;
+            `;
+    
+            const result = await client.query(sql, [id_event_location]);
+    
+            if (result.rows.length > 0) {
+                return result.rows[0].max_capacity;
+            } else {
+                throw new Error(`No se encontró la ubicación del evento con el ID proporcionado (${id_event_location}).`);
+            }
+        } catch (error) {
+            console.error('Error en getMaxCapacity:', error);
+            throw error;
+        } finally {
+            await client.end();
+        }
+    };
 
     obtenerCapacidadMaxima = async (id) =>
     {
@@ -179,5 +207,3 @@ export default class eventsRepository
         }
     };
 }
-
-

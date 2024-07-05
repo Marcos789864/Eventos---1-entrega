@@ -88,8 +88,7 @@ router.get('/:id/enrollment', async (req, res) => {
 });
 
 //Ejercicio 8 Start
-// POST /api/event/
-router.post('/', Middleware.authMiddleware, async (req, res) => {
+router.post('/', MIDLEWARE.authMiddelware, async (req, res) => {
     try {
         const createdEvent = await svc.createEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
         if (createdEvent.success) {
@@ -103,8 +102,7 @@ router.post('/', Middleware.authMiddleware, async (req, res) => {
     }
 });
 
-// PUT /api/event/
-router.put('/', Middleware.authMiddleware, async (req, res) => {
+router.put('/', MIDLEWARE.authMiddelware, async (req, res) => {
     try {
         const updatedEvent = await svc.updateEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
         if (updatedEvent.success) {
@@ -120,8 +118,9 @@ router.put('/', Middleware.authMiddleware, async (req, res) => {
     }
 });
 
-// DELETE /api/event/:id
-router.delete('/:id', Middleware.authMiddleware, async (req, res) => {
+router.delete('/:id', MIDLEWARE.authMiddelware, async (req, res) => {
+    let usuario = req.user.id;
+    console.log(usuario);
     try {
         const deletedEvent = await svc.deleteEvent(req.params.id, req.user.id); // Se pasa el ID del usuario autenticado
         if (deletedEvent.success) {

@@ -5,62 +5,60 @@ const validar = new validacion();
 
 export default class UserService
 {
-    
-    login = async (username,password) =>
-    {
-        let respuesta =
-        {
+    login = async (username, password) => {
+        let respuesta = {
             success: false,
             message: "Error de login",
             token: ""
-        }
+        };
+    
         const repo = new UserRepository();
-        if(validar.validarEmail(username))
-        {   
-            const usuario = await repo.getUserByUsername(username,password);
-            if(usuario != null){
-                const payload = 
-                {
+        if (validar.validarEmail(username)) {
+            const usuario = await repo.getUserByUsername(username, password);
+            if (usuario != null) {
+                const payload = {
                     id: usuario.id,
-                    username: usuario.username 
-                }
-                const options = 
-                {
-                    expiresIn : '1h',
-                }
-                const token = jwt.sign(payload,"ChinoMarcos",options);  
+                    username: usuario.username
+                };
+                console.log('payload', payload)
+                const options = {
+                    expiresIn: '1h',
+                };
+                const token = jwt.sign(payload, 'ChinoMarcos', options);
                 respuesta.success = true;
-                respuesta.message = "Login exitoso",
+                respuesta.message = "Login exitoso";
                 respuesta.token = token;
                 return respuesta;
             }
-        }
-        else
-        {
+        } else {
             respuesta.success = false;
-            respuesta.message = "El mail es invalido",
+            respuesta.message = "El mail es invalido";
             respuesta.token = "";
             return respuesta;
         }
     };
-
-    register = async (entity) => 
-    {
-        let success = false;
+    
+    register = async (entity) => {
+        let respuesta = {
+            success: false,
+            message: ""
+        };
+    
         const repo = new UserRepository();
-
-        if(!validar.validarEmail(entity.username))
-        {
-            return success, "El email es sintacticamente invalido.";
+    
+        if (!validar.validarEmail(entity.username)) {
+            respuesta.message = "El email es sintácticamente inválido.";
+        } else if (entity.password.length < 3) {
+            respuesta.message = "La contraseña cuenta con menos de 3 caracteres.";
+        } else {
+            const success = await repo.createUser(entity);
+            if (success) {
+                respuesta.success = true;
+                respuesta.message = "Usuario creado exitosamente";
+            } else {
+                respuesta.message = "Error al crear el usuario";
+            }
         }
-        else if (entity.password.lentgh < 3){
-            return success, "La contraseña cuenta con menos de 3 caracteres."
-        }
-        else
-        {
-            success = await repo.createUser(entity);
-            return success, "Created";
-        }
-        
-    }
+        return respuesta;
+    };
 }
