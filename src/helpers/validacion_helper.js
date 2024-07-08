@@ -1,3 +1,4 @@
+import { REQUEST_URI_TOO_LONG } from "http-status-codes";
 
  export default class validacion
 {
@@ -43,6 +44,19 @@
         else if(start_date < Date.now() || start_date == Date.now())
         {
             return "No puedes ingresar a un evento que ya ocurrio o que tiene lugar el dia de la fecha";
+        }
+        return "Ok";
+    }
+
+    validarUpdateEvento(rating,Hora){
+
+        if(rating < 1 || rating > 10)
+        {
+            return "El rating va de 1-10";
+        }
+        else if( Hora < Date.now())
+        {
+            return "No puedes ratear un evento que no termino aun";
         }
         return "Ok";
     }

@@ -131,9 +131,22 @@ router.delete('/:id', MIDLEWARE.authMiddelware, async (req, res) => {
         }
     } catch (error) {
         console.error('Error en DELETE /api/event/:id', error);
-        return res.status(500).send('Error interno.');
+        return res.status(500).send('Error interno.');  
     }
 });
 //Ejercicio 8 End
+
+//Ejercicio 10 Start
+
+router.patch('/:id/enrollment/:entero', MIDLEWARE.authMiddelware, async (req,res)=> {
+    try{
+        const event = await svc.getEvent(req.params.id);
+        const event_Enrollment_Update = await svcE.updateEventRank(event,req.params.entero,req.user.id, req.body.observations)
+    }
+    catch (error){
+        console.error('Error en Patch /api/event/:id/enrollment/:entero', error);
+        return res.status(500).send('Error interno.');
+    }
+})
 
 export default router
