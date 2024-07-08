@@ -130,13 +130,13 @@ export default class events_enrollments
         }
     }
 
-    updateEventRatingById = async (entity) =>
+    updateEventRatingById = async (idEvento, entero, idUsuario,observacion) =>
     {
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'UPDATE event_enrollments rating = $1 observations = $2 WHERE id = $3';
-            const result = await client.query(sql, [entity.rate, entity.observation, entity.id]);
+            const sql = 'UPDATE event_enrollments rating = $1 observations = $2 WHERE id_event = $3 and id_user = $4';
+            const result = await client.query(sql, [entero,observacion,idEvento,idUsuario]);
             if (result.rowCount > 0) {
                 success = true;
             }
