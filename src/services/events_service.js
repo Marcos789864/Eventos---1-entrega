@@ -78,6 +78,7 @@ export default class EventsService
     }
 
     async deleteEvent(eventId, userId) {
+        
         const repo = new eventsRepository ();
         const currentEvent = await repo.getEventById(eventId);
         if (!currentEvent) {
@@ -85,12 +86,12 @@ export default class EventsService
         }
 
         if (currentEvent.id_creator_user != userId) {
-            return { success: false, statusCode: 401, message: "No tienes permiso para eliminar este evento." };
+            return { success: false, statusCode: 401, message: "El usuario no es creador del evento." };
         }
 
         const usersRegistered = await repo.getUsersRegisteredCount(eventId);
         if (usersRegistered == null) {
-            return { success: false, message: "No se puede eliminar el evento porque hay usuarios registrados." };
+            return { success: false, statuscode: 400 , message: "No se puede eliminar el evento porque hay usuarios registrados." };
         }
 
         try {

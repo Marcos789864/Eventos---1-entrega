@@ -71,12 +71,14 @@ export default class eventsRepository
         }
     }
 
+    //NO ANDA Y NO SE PORQUE
     getEventById = async (eventId) => {
         const client = new Client(DBConfig);
         try {
-            const sql = 'SELECT * FROM events WHERE id = $1';
-            const result = await client.query(sql, [eventId]);
-            return result.rows[0];
+            const sql = 'SELECT * FROM events WHERE events.id = $1';
+            const values = [eventId];
+            const result = await client.query(sql, values);
+            return result.rows;
         } 
         catch (error) {
             console.error('Error en getEventById:', error);

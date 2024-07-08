@@ -90,11 +90,11 @@ router.get('/:id/enrollment', async (req, res) => {
 //Ejercicio 8 Start
 router.post('/', MIDLEWARE.authMiddelware, async (req, res) => {
     try {
-        const createdEvent = await svc.createEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
-        if (createdEvent.success) {
-            return res.status(201).json(createdEvent);
+        const enrollment = await svc.createEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
+        if (enrollment.success) {
+            return res.status(201).json(enrollment);
         } else {
-            return res.status(400).json(createdEvent);
+            return res.status(400).json(enrollment);
         }
     } catch (error) {
         console.error('Error en POST /api/event/', error);
@@ -124,6 +124,48 @@ router.delete('/:id', MIDLEWARE.authMiddelware, async (req, res) => {
         const deletedEvent = await svc.deleteEvent(req.params.id, usuario); // Se pasa el ID del usuario autenticado
         if (deletedEvent.success) {
             return res.status(200).json(deletedEvent);
+        } 
+        else if (deletedEvent.statusCode === 400){
+            return res.status(400).send(deletedEvent.message);
+        }
+        else if (deletedEvent.statusCode === 401) {
+            return res.status(401).send(deletedEvent.message);
+        } 
+        else {
+            return res.status(404).send(deletedEvent.message);
+        }
+    } catch (error) {
+        console.error('Error en DELETE /api/event/:id', error);
+        return res.status(500).send('Error interno.');
+    }
+});
+//Ejercicio 8 End
+
+//Ejercicio 9 Start
+router.post('/:id/enrollment', MIDLEWARE.authMiddelware, async (req, res) => {
+    try {
+        const enrollment = await svcE.enrollInEvent(req.params.id, req.user.id); // Se pasa el ID del usuario autenticado
+        if (enrollment.success) {
+            return res.status(201).json(enrollment.message);
+        } 
+        else if(enrollment.statusCode === 400){
+            return res.status(400).json(enrollment.message);
+        }
+        else{
+            return res.status(404).send(enrollment.message)
+        }
+    } catch (error) {
+        console.error('Error en POST /api/event/:id/enrollments', error);
+        return res.status(500).send('Error interno.');
+    }
+});
+
+router.delete('/:id/enrollment', MIDLEWARE.authMiddelware, async (req, res) => {
+    let usuario = req.user.id;
+    try {
+        const deletedEvent = await svcE.unenrollFromEvent(req.params.id, usuario); // Se pasa el ID del usuario autenticado
+        if (deletedEvent.success) {
+            return res.status(200).json(deletedEvent);
         } else if (deletedEvent.statusCode === 401) {
             return res.status(401).send(deletedEvent.message);
         } else {
@@ -134,6 +176,6 @@ router.delete('/:id', MIDLEWARE.authMiddelware, async (req, res) => {
         return res.status(500).send('Error interno.');
     }
 });
-//Ejercicio 8 End
+//EJercicio 9 End
 
 export default router

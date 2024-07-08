@@ -72,6 +72,64 @@ export default class events_enrollments
         }
     }
 
+    // Obtener cantidad de usuarios registrados en el evento
+    async getUsersRegisteredCount(eventId) {
+        const client = new Client(DBConfig);
+        try {
+            await client.connect();
+            const sql = 'SELECT COUNT(*) FROM event_enrollments WHERE id_event = $1';
+            const result = await client.query(sql, [eventId]);
+            await client.end();
+            return parseInt(result.rows[0].count, 10);
+        } catch (error) {
+            console.error('Error en getUsersRegisteredCount:', error);
+            throw new Error('Error al obtener los usuarios registrados en el evento de la base de datos.');
+        }
+    }
+
+    // Verificar si un usuario ya está registrado en el evento
+    async checkUserRegistration(eventId, userId) {
+        const client = new Client(DBConfig);
+        try {
+            await client.connect();
+            const sql = 'SELECT * FROM event_enrollments WHERE id_event = $1 AND id_user = $2';
+            const result = await client.query(sql, [eventId, userId]);
+            await client.end();
+            return result.rows.length > 0;
+        } catch (error) {
+            console.error('Error en checkUserRegistration:', error);
+            throw new Error('Error al verificar la inscripción del usuario en el evento.');
+        }
+    }
+
+    // Registrar usuario en el evento
+    async enrollUserInEvent(eventId, userId, registrationDateTime) {
+        const client = new Client(DBConfig);
+        try {
+            await client.connect();
+            const sql = 'INSERT INTO event_enrollments (id_event, id_user, registration_date_time) VALUES ($1, $2, $3)';
+            await client.query(sql, [eventId, userId, registrationDateTime]);
+            await client.end();
+        } catch (error) {
+            console.error('Error en enrollUserInEvent:', error);
+            throw new Error('Error al registrar al usuario en el evento.');
+        }
+    }
+
+    // Eliminar inscripción del usuario en el evento
+    async unenrollUserFromEvent(eventId, userId) {
+        const client = new Client(DBConfig);
+        try {
+            await client.connect();
+            const sql = 'DELETE FROM event_enrollments WHERE id_event = $1 AND id_user = $2';
+            await client.query(sql, [eventId, userId]);
+            await client.end();
+        } catch (error) {
+            console.error('Error en unenrollUserFromEvent:', error);
+            throw new Error('Error al eliminar la inscripción del usuario en el evento.');
+        }
+    }
+
     updateEventRatingById = async (entity) =>
     {
         const client = new Client(DBConfig);
