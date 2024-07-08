@@ -181,13 +181,22 @@ router.delete('/:id/enrollment', MIDLEWARE.authMiddelware, async (req, res) => {
 //Ejercicio 10 Start
 
 router.patch('/:id/enrollment/:entero', MIDLEWARE.authMiddelware, async (req,res)=> {
+    let usuario = req.user.id;
+    
     try{
-        const event = await svc.getEvent(req.params.id);
-        const event_Enrollment_Update = await svcE.updateEventRank(event,req.params.entero,req.user.id, req.body.observations)
+        let eventId = parseInt(req.params.id);
+        let event = await svc.getEventById(eventId);
+
+        const event_Enrollment_Update = await svcE.updateEventRank(eventId,event.start_date,req.params.entero,usuario, req.body.observations)
+        if(event_Enrollment_Update == true)
+        {
+            console.log("Evento actualizado");
+        }
+
     }
     catch (error){
         console.error('Error en Patch /api/event/:id/enrollment/:entero', error);
-        return res.status(500).send('Error interno.');
+        return res.status(500).send('Error interno.');  
     }
 })
 

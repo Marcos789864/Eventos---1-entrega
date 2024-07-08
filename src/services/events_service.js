@@ -114,11 +114,13 @@ export default class EventsService
         return Events;
     }
 
-    getEvent = async (query) => {
+    getEventById = async (eventId) => {
         const repo = new eventsRepository();
-        const Events = await repo.getEvent(query);
+        const Events = await repo.getEventById(eventId);
         return Events;
     }
+
+
 
     getEventDetail = async (id) => {
         const repo = new eventsRepository();

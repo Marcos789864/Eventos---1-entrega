@@ -74,7 +74,7 @@ export default class events_enrollmentsService
         }
     }
 
-    updateEventRank = async (evento, entero, idUsuario,observacion) =>{
+    updateEventRank = async (idEvento,hora, entero, idUsuario,observacion) =>{
         
         const repo = new events_enrollmentRepository();
         const UserAppliedForEvent  =  await repo.getUserFromEvent(idUsuario)
@@ -82,12 +82,13 @@ export default class events_enrollmentsService
         {
             return "El usuario no se encuentra alistado en el evento";
         }
-        if(validar.validarUpdateEvento(entero,evento.start_date) != "Ok"){
+        if(validar.validarUpdateEvento(entero,hora) != "Ok"){
             return validar.validarUpdateEvento(entero,evento.start_date)
         }
         else
         {
-        return await repo.updateEventRatingById(evento.id,entero,idUsuario,observacion);
+        const succes = await repo.updateEventRatingById(idEvento,entero,idUsuario,observacion);
+        return succes;
         }
         
     }

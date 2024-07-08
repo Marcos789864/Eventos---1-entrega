@@ -25,7 +25,6 @@ export default class events_enrollments
         const client = new Client(DBConfig);
         try {
             await client.connect();
-
             let sql = `
                 SELECT users.*, events.*, event_enrollments.*
                 FROM users
@@ -135,16 +134,17 @@ export default class events_enrollments
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'UPDATE event_enrollments rating = $1 observations = $2 WHERE id_event = $3 and id_user = $4';
+            const sql = 'UPDATE event_enrollments rating = $1 observations = $2 WHERE id_event = $3 AND id_user = $4';
             const result = await client.query(sql, [entero,observacion,idEvento,idUsuario]);
             if (result.rowCount > 0) {
                 success = true;
             }
             await client.end();
+            return success;
         } catch (error) {
-            console.log(error);
+           return console.log(error);
         }
-        return result;
+        
     }
     
     createEnrollment = async (entity) =>
