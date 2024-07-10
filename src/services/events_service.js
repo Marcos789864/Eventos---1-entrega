@@ -85,12 +85,13 @@ export default class EventsService
             return { success: false, statusCode: 404, message: "El evento no existe." };
         }
 
-        if (currentEvent.id_creator_user != userId) {
+        if (!(currentEvent.id_creator_user === userId)) {
             return { success: false, statusCode: 401, message: "El usuario no es creador del evento." };
         }
 
         const usersRegistered = await repo.getUsersRegisteredCount(eventId);
-        if (usersRegistered == null) {
+
+        if (usersRegistered != undefined) {
             return { success: false, statuscode: 400 , message: "No se puede eliminar el evento porque hay usuarios registrados." };
         }
 
@@ -119,8 +120,6 @@ export default class EventsService
         const Events = await repo.getEventById(eventId);
         return Events;
     }
-
-
 
     getEventDetail = async (id) => {
         const repo = new eventsRepository();

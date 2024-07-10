@@ -42,9 +42,9 @@ export default class eventsRepository
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'DELETE * FROM events WHERE id = $1';
+            const sql = 'DELETE FROM events WHERE id = $1';
             const result = await client.query(sql, [eventId]);
-            return result.rowCount > 0;
+            return result;
         } catch (error) {
             console.error('Error en deleteEvent:', error);
             throw new Error('Error al eliminar el evento en la base de datos.');
@@ -56,6 +56,7 @@ export default class eventsRepository
     getUsersRegisteredCount = async (eventId) => {
         const client = new Client(DBConfig);
         try {
+            await client.connect();
             const sql = `SELECT *
             FROM event_enrollments
             WHERE id_event = $1`;
@@ -78,7 +79,7 @@ export default class eventsRepository
             await client.connect();
             const sql = 'SELECT * FROM events WHERE id = $1';
             const result = await client.query(sql, [eventId]);
-            return result.rows;
+            return result.rows[0];
         } 
         catch (error) {
             console.error('Error en getEventById:', error);

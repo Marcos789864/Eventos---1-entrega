@@ -48,7 +48,7 @@ router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
 
-        const event = await svc.getEventDetail(id);
+        const event = await svc.getEventById(id);
 
         if (event != null) {
             return res.status(200).json(event);
@@ -119,9 +119,8 @@ router.put('/', MIDLEWARE.authMiddelware, async (req, res) => {
 });
 
 router.delete('/:id', MIDLEWARE.authMiddelware, async (req, res) => {
-    let usuario = req.user.id;
     try {
-        const deletedEvent = await svc.deleteEvent(req.params.id, usuario); // Se pasa el ID del usuario autenticado
+        const deletedEvent = await svc.deleteEvent(req.params.id, req.user.id); // Se pasa el ID del usuario autenticado
         if (deletedEvent.success) {
             return res.status(200).json(deletedEvent);
         } 
@@ -179,7 +178,6 @@ router.delete('/:id/enrollment', MIDLEWARE.authMiddelware, async (req, res) => {
 //EJercicio 9 End
 
 //Ejercicio 10 Start
-
 router.patch('/:id/enrollment/:entero', MIDLEWARE.authMiddelware, async (req,res)=> {
     let usuario = req.user.id;
     
