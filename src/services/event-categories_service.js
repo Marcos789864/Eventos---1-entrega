@@ -23,6 +23,12 @@ export default class events_CategoriesService
     const msg = await repo.createCategory(entity.name, entity.display_order);
     return msg;
     };
+    updateCategory = async(entity) =>
+    {
+        const repo = new event_categoriesRepository;
+        const msg = await repo.UpdateCategory(entity);
+        return msg;
+    }
 
     deleteCategory = async(id)=>
     {

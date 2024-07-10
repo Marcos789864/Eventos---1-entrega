@@ -52,6 +52,24 @@ router.get('/:id', async (req,res) =>
             }
         });
 
+    router.put('', async (req,res) =>
+    {
+        try
+        {
+            const categories = await svc.updateCategory(req.body);
+            if (categories != null) {
+                return res.status(200).json(categories);
+            } else {
+                return res.status(500).send('Error interno.');
+            }
+        }    
+        catch
+        {
+            return res.status(500).send('Error interno.');
+        }
+
+    });
+
     router.delete('/:id', async (req,res) =>
         {
             const id = parseInt(req.params.id)

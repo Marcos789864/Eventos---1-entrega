@@ -45,7 +45,21 @@ export default class events_categories
         }
         
     }
-    //FALTA EDITAR CATEGORIA
+
+    UpdateCategory = async(entity) => {
+        const client = new Client(DBConfig);
+        try{
+            await client.connect();
+            const sql = 'Update event_categories SET name = $1 , display_order = $2 where id = $3';
+            const result = await client.query(sql,[entity.name,entity.display_order,entity.id]);
+            await client.end();
+            return "Modificacion exitosa";
+        }
+        catch(error){
+            return console.log(error);
+        }
+    }
+    
     deleteCategory = async(id) =>{
         const client = new Client(DBConfig);
         try {

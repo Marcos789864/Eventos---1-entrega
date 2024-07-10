@@ -1,6 +1,6 @@
 import LocationRepository from '../repositories/locations_repository.js';
 
-export default class ProvinceService
+export default class LocationService
 {
     getLocationsById = async (id) => 
     {
