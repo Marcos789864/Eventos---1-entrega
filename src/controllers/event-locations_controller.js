@@ -44,16 +44,23 @@ router.get("/:id", MIDLEWARE.authMiddelware ,async (req,res) =>{
     try
     {
         const location = await svcl.getLocationsById(req.body.id_location);
-        const event_location = await svc.createEventLocation(req.body);
-        if (event_location != null) {
-            return res.status(200).json(event_location);
-        } else {
-            return res.status(500).send('Error interno');
+        if(location != "Id inexistente")
+        {
+            const event_location = await svc.createEventLocation(req.body);
+            if (event_location != null) {
+                return res.status(200).json(event_location);
+            } else {
+                return res.status(500).send('Error interno');
+            }
         }
+        else{
+            return res.status(500).send(location);
+        }
+        
     }
     catch
     {
-        return res.status(500).send('Error interno');
+        return res.status(500).send(location);
     }
   })
 

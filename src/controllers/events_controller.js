@@ -185,7 +185,6 @@ router.patch('/:id/enrollment/:entero', MIDLEWARE.authMiddelware, async (req,res
     
     try{
         let event = await svc.getEventById(req.params.id);
-
         const event_Enrollment_Update = await svcE.updateEventRank(req.params.id,event.start_date,req.params.entero,usuario, req.body.observations)
         if(event_Enrollment_Update == true)
         {
