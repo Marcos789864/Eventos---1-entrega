@@ -129,23 +129,20 @@ export default class events_enrollments
         }
     }
 
-    updateEventRatingById = async (idEvento, entero, idUsuario,observacion) =>
-    {
+    updateEventRatingById = async (eventId, rating, userId, observations) => {
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'UPDATE event_enrollments SET observations = $2, rating = $1  WHERE id_event = $3 AND id_user = $4';
-            const result = await client.query(sql, [entero,observacion,idEvento,idUsuario]);
-            
-                await client.end();
-                return true;
-    
-            
+            const sql = 'UPDATE event_enrollments SET observations = $1, rating = $2 WHERE id_event = $3 AND id_user = $4';
+            await client.query(sql, [observations, rating, eventId, userId]);
+            await client.end();
+            return true;
         } catch (error) {
-           return console.log(error);
+            console.error('Error en updateEventRatingById:', error);
+            await client.end();
+            return false;
         }
-        
-    }
+    }    
     
     createEnrollment = async (entity) =>
     {

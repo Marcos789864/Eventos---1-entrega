@@ -17,12 +17,9 @@ export default class LocationService
     }
 
     getEventLocationByLocationId = async (id) =>
-        {
-            const repo = new LocationRepository();
+    {
+        const repo = new LocationRepository();
         const Location = await repo.getEventLocationsByIdLocation(id);
         return Location;
-        }
-
-    
-
+    }
 }

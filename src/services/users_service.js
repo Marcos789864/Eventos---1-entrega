@@ -30,6 +30,12 @@ export default class UserService
                 respuesta.token = token;
                 return respuesta;
             }
+            else{
+                respuesta.success = false;
+                respuesta.message = "El usuario no existe";
+                respuesta.token = "";
+                return respuesta;
+            }
         } else {
             respuesta.success = false;
             respuesta.message = "El mail es invalido";

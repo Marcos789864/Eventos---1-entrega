@@ -178,22 +178,24 @@ router.delete('/:id/enrollment', MIDLEWARE.authMiddelware, async (req, res) => {
 //EJercicio 9 End
 
 //Ejercicio 10 Start
-router.patch('/:id/enrollment/:entero', MIDLEWARE.authMiddelware, async (req,res)=> {
-    let usuario = req.user.id;
-    
-    try{
-        let event = await svc.getEventById(req.params.id);
-        const event_Enrollment_Update = await svcE.updateEventRank(req.params.id,event.start_date,req.params.entero,usuario, req.body.observations)
-        if(event_Enrollment_Update == true)
-        {
-            console.log("Evento actualizado");
-        }
+router.patch('/:id/enrollment/:rating', MIDLEWARE.authMiddelware, async (req, res) => {
+    let userId = req.user.id;
+    let eventId = req.params.id;
+    let rating = parseInt(req.params.rating);
+    let observations = req.body.observations || "";
 
+    try {
+        const result = await svcE.updateEventRank(eventId, rating, userId, observations);
+        if (result.success) {
+            return res.status(result.statusCode).send(result.message);
+        } else {
+            return res.status(result.statusCode).send(result.message);
+        }
+    } catch (error) {
+        console.error('Error en PATCH /api/event/:id/enrollment/:rating', error);
+        return res.status(500).send('Error interno.');
     }
-    catch (error){
-        console.error('Error en Patch /api/event/:id/enrollment/:entero', error);
-        return res.status(500).send('Error interno.');  
-    }
-})
+});
+//Ejercicio 10 End
 
 export default router
