@@ -39,6 +39,23 @@ export default class events_locationsRepository
         
     }
 
+    createLocation = async (entity,idUsuario)=>
+    {
+        const client = new Client(DBConfig);
+        try
+        {
+            await client.connect();
+            const sql =  'Insert into event_locations id_location,name,full_adress,max_capacity,latitude,longitude,id_creator_user Values ($1,$2,$3,$4,$5,$6,$7)';
+            const result = await client.query(sql,[]);
+            await client.end();
+            return result.rows;
+        }
+        catch(error)
+        {
+           return console.log(error);
+        }
+    }
+
     
 
 }

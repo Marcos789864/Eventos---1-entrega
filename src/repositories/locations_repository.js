@@ -54,7 +54,7 @@ export default class Locations
     }
     catch(error)
     {
-       return  console.log(error);
+       return  "Id inexistente";
     }
     
     }
