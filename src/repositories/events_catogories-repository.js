@@ -11,14 +11,13 @@ export default class events_categories
             await client.connect();
             const sql = 'SELECT * FROM event_categories';
             const result = await client.query(sql);
-            if (result.rowCount > 0) {
-                success = true;
-            }
+            
             await client.end();
+            return result.rows
         } catch (error) {
-            console.log(error);
+          return  console.log(error);
         }
-        return result;
+        
     }
     getCateogoryById = async(id) =>{
         const client = new Client(DBConfig);
@@ -26,14 +25,12 @@ export default class events_categories
             await client.connect();
             const sql = 'SELECT * FROM event_categories WHERE id = $1';
             const result = await client.query(sql,[id]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
             await client.end();
+            return result.rows[0];
         } catch (error) {
-            console.log(error);
+           return console.log(error);
         }
-        return result;
+        
     }
     createCategory = async(name,display_order) =>{
         const client = new Client(DBConfig);
@@ -41,14 +38,12 @@ export default class events_categories
             await client.connect();
             const sql = 'INSERT INTO event_categories(name,display_order) VALUES($1,$2)';
             const result = await client.query(sql,[name,display_order]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
             await client.end();
+            return "Creacion exitosa"
         } catch (error) {
-            console.log(error);
+            return console.log(error);
         }
-        return result;
+        
     }
     //FALTA EDITAR CATEGORIA
     deleteCategory = async(id) =>{
@@ -57,14 +52,12 @@ export default class events_categories
             await client.connect();
             const sql = 'DELETE FROM event_categories WHERE id = $1';
             const result = await client.query(sql,[id]);
-            if (result.rowCount > 0) {
-                success = true;
-            }
             await client.end();
+            return "Eliminacion exitosa";
         } catch (error) {
-            console.log(error);
+            returnconsole.log("El id propocionado no ha sido encontrado");
         }
-        return result;
+        
     }
 
 }
