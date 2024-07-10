@@ -15,7 +15,7 @@ app.use("/api/province",ProvinceRouter);
 app.use("/api/event",EventRouter);
 app.use("/api/user",UserRouter);
 app.use("/api/location",LocationRouter);
-app.use("/api/event-categories", events_categories);
-app.use("/api/evet-locations",events_locations);
+app.use("/api/event-category", events_categories);
+app.use("/api/event-location",events_locations);
 
 app.listen(port,()=>{ console.log(`Exampleapplisteningonport${port}`)}) 

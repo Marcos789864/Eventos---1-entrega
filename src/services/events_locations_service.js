@@ -15,39 +15,26 @@ export default class EventLocationService {
         return eventLocation;
     }
 
-    createEventLocation = async (entity,idUsuario) => 
-    {
+    createEventLocation = async (entity, idUsuario) => {
         const repo = new EventsLocationsRepository();
-    const result = validar.validarPostEventLocation(entity.name,entity.full_adress,entity.max_capacity);
-        if ( result == "Ok"){
-            const eventLocations = await repo.createLocation(entity,idUsuario);
-            return eventLocations;
-        }
-        else
-        {
-            return result;
-        }
-    }
-
-    updateEventLocation = async (entity,idUsuario) =>
-    {
-        const repo = new EventsLocationsRepository();
-        const result = validar.validarPostEventLocation(entity.name,entity.full_address,entity.max_capacity);
-            if ( result == "Ok"){
-                const eventLocations = await repo.updateEventLocation(entity,idUsuario);
-                return eventLocations;
-            }
-            else
-            {
-                return result;
-            }
-    }
-
-    deleteEventLocation = async (id)=>
-    {
-        const repo = new EventsLocationsRepository();
-        const msg = await repo.deleteEventLocation(id);
-        return msg;
+        const result = await repo.createLocation(entity, idUsuario);
+        return result;
     }
     
+    updateEventLocation = async (entity, idUsuario) => {
+        const repo = new EventsLocationsRepository();
+        const location = await repo.getById(entity.id_location);
+        if (location === "Id inexistente") {
+            return "Id inexistente";
+        }
+    
+        const result = await repo.updateEventLocation(entity, idUsuario);
+        return result;
+    }
+    
+    deleteEventLocation = async (id) => {
+        const repo = new EventsLocationsRepository();
+        const result = await repo.deleteEventLocation(id);
+        return result;
+    }    
 }
