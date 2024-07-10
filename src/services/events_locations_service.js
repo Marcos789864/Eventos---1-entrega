@@ -9,9 +9,9 @@ export default class EventLocationService {
         return eventLocations;
     }
 
-    getByIdAsync = async (id,idUser) => {
+    getByIdAsync = async (id) => {
         const repo = new EventsLocationsRepository();
-        const eventLocation = await repo.getById(parseInt(id),idUser);
+        const eventLocation = await repo.getById(id);
         return eventLocation;
     }
 
@@ -23,11 +23,6 @@ export default class EventLocationService {
     
     updateEventLocation = async (entity, idUsuario) => {
         const repo = new EventsLocationsRepository();
-        const location = await repo.getById(entity.id_location);
-        if (location === "Id inexistente") {
-            return "Id inexistente";
-        }
-    
         const result = await repo.updateEventLocation(entity, idUsuario);
         return result;
     }

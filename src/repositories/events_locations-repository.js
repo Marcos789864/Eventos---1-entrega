@@ -20,17 +20,17 @@ export default class events_locationsRepository
         
     }
 
-    getById = async (id,idUser) => 
+    getById = async (id) => 
     {
         let returnArray = null;
         const client = new Client(DBConfig);
         try
         {
             await client.connect();
-            const sql =  'SELECT * FROM event_locations where id = $1 AND id_creator_user = $2 ';
-            const result = await client.query(sql,[id,idUser]);
+            const sql =  'SELECT * FROM event_locations where id = $1';
+            const result = await client.query(sql,[id]);
             await client.end();
-            return result.rows;
+            return result.rows[0];
         }
         catch(error)
         {
@@ -57,8 +57,8 @@ export default class events_locationsRepository
         const client = new Client(DBConfig);
         try {
             await client.connect();
-            const sql = 'UPDATE event_locations SET name = $2, full_address = $3, max_capacity = $4, latitude = $5, longitude = $6, id_creator_user = $7 WHERE id = $1';
-            await client.query(sql, [entity.id_location, entity.name, entity.full_address, entity.max_capacity, entity.latitude, entity.longitude, idUsuario]);
+            const sql = 'UPDATE event_locations SET id_location = $2, name = $3, full_address = $4, max_capacity = $5, latitude = $6, longitude = $7, id_creator_user = $8 WHERE id = $1';
+            await client.query(sql, [entity.id, entity.id_location, entity.name, entity.full_address, entity.max_capacity, entity.latitude, entity.longitude, idUsuario]);
             await client.end();
             return "Actualización exitosa";
         } catch (error) {

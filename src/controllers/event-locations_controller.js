@@ -84,9 +84,9 @@ router.put("", MIDLEWARE.authMiddelware, async (req, res) => {
         if (max_capacity <= 0) {
             return res.status(400).send("La capacidad máxima debe ser mayor que cero.");
         }
-
-        const location = await svc.getByIdAsync(id);
-        if (location === "Id inexistente") {
+        
+        const result = await svc.getByIdAsync(id);
+        if (result == null) {
             return res.status(404).send('El id es inexistente.');
         }
 
