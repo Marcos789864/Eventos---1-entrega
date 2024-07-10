@@ -46,7 +46,7 @@ router.get("/:id", MIDLEWARE.authMiddelware ,async (req,res) =>{
         const location = await svcl.getLocationsById(req.body.id_location);
         if(location != "Id inexistente")
         {
-            const event_location = await svc.createEventLocation(req.body);
+            const event_location = await svc.createEventLocation(req.body,req.user.id);
             if (event_location != null) {
                 return res.status(200).json(event_location);
             } else {
@@ -54,7 +54,7 @@ router.get("/:id", MIDLEWARE.authMiddelware ,async (req,res) =>{
             }
         }
         else{
-            return res.status(500).send(location);
+            return res.status(500).send("Error interno");
         }
         
     }
@@ -62,6 +62,50 @@ router.get("/:id", MIDLEWARE.authMiddelware ,async (req,res) =>{
     {
         return res.status(500).send(location);
     }
+  })
+
+  router.put("",MIDLEWARE.authMiddelware ,async (req,res) =>
+  {
+    try
+    {
+        const location = await svcl.getLocationsById(req.body.id_location);
+        if(location != "Id inexistente")
+        {
+            const event_location = await svc.updateEventLocation(req.body,req.user.id);
+            if (event_location != null) {
+                return res.status(200).json(event_location);
+            } else {
+                return res.status(500).send('Error interno');
+            }
+        }
+        else{
+            return res.status(500).send("Error interno");
+        }
+        
+    }
+    catch
+    {
+        return res.status(500).send("Erro interno");
+    }
+
+  });
+
+  router.delete("/:id",MIDLEWARE.authMiddelware ,async (req,res) =>
+  {
+    try
+    {
+            const event_location = await svc.deleteEventLocation(req.params.id);
+            if (event_location != null) {
+                return res.status(200).json(event_location);
+            } else {
+                return res.status(500).send('Error interno');
+            }
+    }
+    catch
+    {
+        return res.status(500).send("Error interno");
+    }
+
   })
 
 

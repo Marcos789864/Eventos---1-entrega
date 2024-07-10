@@ -45,14 +45,65 @@ export default class events_locationsRepository
         try
         {
             await client.connect();
-            const sql =  'Insert into event_locations id_location,name,full_adress,max_capacity,latitude,longitude,id_creator_user Values ($1,$2,$3,$4,$5,$6,$7)';
-            const result = await client.query(sql,[]);
+            const sql =  'INSERT INTO event_locations (id_location, name, full_address, max_capacity, latitude, longitude, id_creator_user) VALUES ($1, $2, $3, $4, $5, $6, $7);';
+            const result = await client.query(sql,[entity.id_location,entity.name,entity.full_adress,entity.max_capacity,entity.latitude,entity.longitude,idUsuario]);
             await client.end();
-            return result.rows;
+            return "Creacion exitosa";
         }
         catch(error)
         {
-           return console.log(error);
+           return "Error de conexion";
+        }
+    }
+
+    updateEventLocation = async (entity, idUsuario) => {
+        const client = new Client(DBConfig);
+        try {
+            await client.connect();
+            const sql = `
+                UPDATE event_locations 
+                SET name = $2,
+                    full_address = $3,
+                    max_capacity = $4,
+                    latitude = $5,
+                    longitude = $6,
+                    id_creator_user = $7
+                WHERE id_location = $1`;
+            
+    const result = await client.query(sql, [
+                entity.id_location,
+                entity.name,
+                entity.full_address, 
+                entity.max_capacity,
+                entity.latitude,
+                entity.longitude,
+                idUsuario
+            ]);
+    
+            await client.end();
+            return "Actualización exitosa";
+        } catch(error) {
+            console.error("Error de conexión:", error);
+            return "Error de conexión";
+        }
+    }
+
+    deleteEventLocation = async (id) =>
+    {
+        const client = new Client(DBConfig);
+        try {
+            await client.connect();
+            const sql = `
+            DELETE FROM event_locations 
+            WHERE id_location = $1`;
+            
+    const result = await client.query(sql, [id]);
+    
+            await client.end();
+            return "Eliminacion exitosa";
+        } catch(error) {
+            console.error("Error de conexión:", error);
+            return "Error de conexión";
         }
     }
 
