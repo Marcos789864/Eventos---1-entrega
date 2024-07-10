@@ -2,10 +2,10 @@ import LocationRepository from '../repositories/locations_repository.js';
 
 export default class ProvinceService
 {
-    getLocationsByIdProvince = async (id) => 
+    getLocationsById = async (id) => 
     {
         const repo = new LocationRepository();
-        const Location = await repo.getLocationsByIdProvince(id);
+        const Location = await repo.getLocationsById(id);
         return Location;
     }
 
@@ -15,6 +15,13 @@ export default class ProvinceService
         const Location = await repo.getAllLocations();
         return Location;
     }
+
+    getEventLocationByLocationId = async (id) =>
+        {
+            const repo = new LocationRepository();
+        const Location = await repo.getEventLocationsByIdLocation(id);
+        return Location;
+        }
 
     
 

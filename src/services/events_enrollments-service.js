@@ -78,6 +78,7 @@ export default class events_enrollmentsService
         
         const repo = new events_enrollmentRepository();
         const UserAppliedForEvent  =  await repo.getUserFromEvent(idUsuario)
+        const IdEvento = parseInt(idEvento)
         if(UserAppliedForEvent == null)
         {
             return "El usuario no se encuentra alistado en el evento";
@@ -87,7 +88,7 @@ export default class events_enrollmentsService
         }
         else
         {
-        const succes = await repo.updateEventRatingById(idEvento,entero,idUsuario,observacion);
+        const succes = await repo.updateEventRatingById(IdEvento,entero,idUsuario,observacion);
         return succes;
         }
         

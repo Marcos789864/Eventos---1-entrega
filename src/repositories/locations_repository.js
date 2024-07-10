@@ -11,7 +11,7 @@ export default class Locations
     try
     {
         await client.connect();
-        const sql =  'SELECT * FROM locations WHERE locations.id_province = $1';
+        const sql =  'SELECT * FROM locations WHERE locations.id = $1';
         const result = await client.query(sql,[id]);
         await client.end();
         Location = result.rows;
@@ -40,6 +40,7 @@ export default class Locations
     }
     return ArrayLocation;
     }
+
     getLocationsById = async (id) =>
     {
         const client = new Client(DBConfig);
@@ -49,26 +50,29 @@ export default class Locations
         const sql =  'SELECT * FROM locations WHERE id = $1';
         const result = await client.query(sql,[id]);
         await client.end();
+        return result.rows[0];
     }
     catch(error)
     {
-        console.log(error);
+       return  console.log(error);
     }
-    return result;
+    
     }
+
     getEventLocationsByIdLocation = async (id) =>
     {
         const client = new Client(DBConfig);
     try
     {
         await client.connect();
-        const sql =  'SELECT * FROM event_locations WHERE id_location = $1';
+        const sql =  'SELECT * FROM event_locations WHERE id_location = $1 ';
         const result = await client.query(sql,[id]);
         await client.end();
+        return result.rows[0];
     }
     catch(error)
     {
-        console.log(error);
+       return console.log(error);
     }
     }
 }
