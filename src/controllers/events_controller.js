@@ -162,7 +162,7 @@ router.post('/:id/enrollment', MIDLEWARE.authMiddelware, async (req, res) => {
 router.delete('/:id/enrollment', MIDLEWARE.authMiddelware, async (req, res) => {
     let usuario = req.user.id;
     try {
-        const deletedEvent = await svcE.unenrollFromEvent(req.params.id, usuario); // Se pasa el ID del usuario autenticado
+        const deletedEvent = await svcE.unenrollFromEvent(req.params.id,usuario); // Se pasa el ID del usuario autenticado
         if (deletedEvent.success) {
             return res.status(200).json(deletedEvent);
         } else if (deletedEvent.statusCode === 401) {

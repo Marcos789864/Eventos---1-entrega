@@ -61,5 +61,17 @@ import { REQUEST_URI_TOO_LONG } from "http-status-codes";
         return "Ok";
     }
 
+    validarPostEventLocation(name,full_address,max_capacity)
+    {   
+        if(name.length < 3 || full_address.length < 3 ){
+            return "El nombre o el adress debe tener longitud mayor a 3";
+        }
+        else if(max_capacity <= 0 )
+        {
+            return "La capacidad debe ser mayor a 0";
+        }
+        return "Ok";
+    }
+
 }
 

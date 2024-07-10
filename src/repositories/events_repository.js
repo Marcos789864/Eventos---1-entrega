@@ -142,7 +142,7 @@ export default class eventsRepository
             const sql = 'SELECT * FROM events';
             const result = await client.query(sql);
             await client.end();
-            return result;
+            return result.rows;
         } catch (error) {
             console.log(error);
         }

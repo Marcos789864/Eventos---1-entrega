@@ -72,7 +72,7 @@ router.put('', async (req, res) => {
         }
         const response = await svc.putProvince(req.body);
         if (response.success) {
-            return res.status(200).send();
+            return res.status(200).send(response.message);
         } else {
             return res.status(404).send(response.message); // Cambiado a 404 si no se encuentra el ID especificado
         }
