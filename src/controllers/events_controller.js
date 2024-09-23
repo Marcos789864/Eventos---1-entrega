@@ -9,7 +9,7 @@ const MIDLEWARE = new mdw();
 
 
 //Ejercicio 2
-router.get('', async (req,res) =>
+router.get('/getAll', async (req,res) =>
 {
     try
     {
