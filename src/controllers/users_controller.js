@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
     
     const response = await svc.register(req.body);
         if (response != null) {
-            if(response == true){
+            if(response.success == true){
                 return res.status(200).send(response)
             }
             else{
