@@ -3,7 +3,7 @@ import validacion from "../helpers/validacion_helper.js";
 const validar = new validacion();
 export default class events_CategoriesService
 {
-
+6
     getAllCategories = async() =>
      {
     const repo = new event_categoriesRepository;
