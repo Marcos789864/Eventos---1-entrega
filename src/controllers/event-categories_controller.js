@@ -6,8 +6,9 @@ const svc =  new events_CategoriesService();
 const MIDLEWARE = new mdw();
 
 //Ejercicio 12 Start
-router.get('getAll' ,async (req,res) =>
+router.get('/getAll' ,async (req,res) =>
 {
+    console.log("a");
     try
     {
         const cateogries = await svc.getAllCategories()
