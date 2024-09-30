@@ -6,7 +6,7 @@ const svc =  new events_CategoriesService();
 const MIDLEWARE = new mdw();
 
 //Ejercicio 12 Start
-router.get('' ,async (req,res) =>
+router.get('getAll' ,async (req,res) =>
 {
     try
     {
