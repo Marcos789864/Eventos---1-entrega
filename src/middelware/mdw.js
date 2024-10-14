@@ -17,12 +17,12 @@ export default class MWD
                     next();
                 }
                 else{
-                    return res.status(401).send("Token invalido");
+                    return res.status(401).send("Token invalido1");
                 }
             }catch(e)
             {
                 console.log(e);
-                return res.status(401).send("Token invalido");
+                return res.status(401).send("Token invalido2");
             }
         }
 }

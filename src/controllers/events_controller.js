@@ -88,7 +88,9 @@ router.get('/:id/enrollment', async (req, res) => {
 });
 
 //Ejercicio 8 Start
-router.post('/', MIDLEWARE.authMiddelware, async (req, res) => {
+router.post('/createEvent', async (req, res) => {
+    console.log(req.body)
+    //sacar con nombre de usuario su id y ponerlo en el req.user
     try {
         const enrollment = await svc.createEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
         if (enrollment.success) {
