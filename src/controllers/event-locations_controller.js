@@ -8,7 +8,7 @@ const svcl = new LocationService();
 
 const MIDLEWARE = new mdw();
 
-router.get("", MIDLEWARE.authMiddelware ,async (req,res) =>{
+router.get('/getAll', async (req,res) =>{
 
   try{
     const event_locations =  await svc.getAllLocations();
