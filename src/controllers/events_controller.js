@@ -2,11 +2,12 @@ import {Router} from 'express';
 import EventsService from '../services/events_service.js';
 import events_enrollmentsService from '../services/events_enrollments-service.js';
 import mdw from '../middelware/mdw.js';
+import UserRepository from '../repositories/users_repository.js';
 const router = Router();
 const svc = new EventsService();
 const svcE = new events_enrollmentsService();
 const MIDLEWARE = new mdw();
-
+const repoU = new UserRepository();
 
 //Ejercicio 2
 router.get('/getAll', async (req,res) =>
@@ -90,9 +91,8 @@ router.get('/:id/enrollment', async (req, res) => {
 //Ejercicio 8 Start
 router.post('/createEvent', async (req, res) => {
     console.log(req.body)
-    //sacar con nombre de usuario su id y ponerlo en el req.user
     try {
-        const enrollment = await svc.createEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
+        const enrollment = await svc.createEvent(req.body, req.body.id_creator); // Se pasa el ID del usuario autenticado
         if (enrollment.success) {
             return res.status(201).json(enrollment);
         } else {

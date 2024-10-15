@@ -25,7 +25,7 @@ export default class UserRepository
         }
         return returnEntity;
     };
-      
+
     createUser = async (user) => {
         let success = false;
         const client = new Client(DBConfig);

@@ -27,6 +27,7 @@ export default class UserService
                 const token = jwt.sign(payload, 'ChinoMarcos', options);
                 respuesta.success = true;
                 respuesta.message = "Login exitoso";
+                respuesta.dato = usuario.id;
                 respuesta.token = token;
                 return respuesta;
             }
