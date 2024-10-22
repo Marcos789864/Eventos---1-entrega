@@ -30,7 +30,7 @@ router.get('', async (req, res) => {
     try {
         const query = req.query;
 
-        const events = await svc.getEvent(query);
+        const events = await svc.getEvents(query);
 
         if (events != null) {
             return res.status(200).json(events);
