@@ -7,7 +7,7 @@ export default class EventsService
 {
     async createEvent(eventData) {
         const repo = new eventsRepository ();
-        const { name, description, id_event_location, max_assistance, price, duration_in_minutes, enabled_for_enrollment } = eventData;
+        const { name, description, id_event_location, max_assistance, price, duration_in_minutes,id_creator_user } = eventData;
 
         if (!name || name.length < 3 || !description || description.length < 3) {
             return { success: false, message: "El nombre y la descripción deben tener al menos 3 caracteres." };
