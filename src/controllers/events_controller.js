@@ -88,11 +88,11 @@ router.get('/:id/enrollment', async (req, res) => {
     }
 });
 
-//Ejercicio 8 Start
+
 router.post('/createEvent', async (req, res) => {
     console.log(req.body)
     try {
-        const enrollment = await svc.createEvent(req.body, req.body.id_creator); // Se pasa el ID del usuario autenticado
+        const enrollment = await svc.createEvent(req.body); // Se pasa el ID del usuario autenticado
         if (enrollment.success) {
             return res.status(201).json(enrollment);
         } else {
