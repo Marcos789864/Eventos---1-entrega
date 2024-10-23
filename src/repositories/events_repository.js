@@ -23,7 +23,7 @@ export default class eventsRepository
     
     updateEvent= async (eventData) => {
         const client = new Client(DBConfig);
-        const { id, name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user } = eventData;
+        const { id, name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance } = eventData;
         try {
             await client.connect();
             const sql = 'UPDATE events SET name = $2, description = $3, id_event_category = $4, id_event_location = $5, start_date = $6, duration_in_minutes = $7, price = $8, enabled_for_enrollment = $9, max_assistance = $10 WHERE id = $1';

@@ -5,7 +5,7 @@ const validar = new validacion();
 
 export default class EventsService
 {
-    async createEvent(eventData, userId) {
+    async createEvent(eventData) {
         const repo = new eventsRepository ();
         const { name, description, id_event_location, max_assistance, price, duration_in_minutes, enabled_for_enrollment } = eventData;
 
@@ -13,7 +13,8 @@ export default class EventsService
             return { success: false, message: "El nombre y la descripción deben tener al menos 3 caracteres." };
         }
 
-        const maxCapacity = await repo.getMaxCapacity(id_event_location);
+        const maxCapacity = await repo.getMaxCapacity(parseInt(id_event_location));
+        console.log(maxCapacity);
         if (max_assistance > maxCapacity) {
             return { success: false, message: "El máximo de asistentes supera la capacidad máxima del lugar del evento." };
         }
@@ -25,12 +26,26 @@ export default class EventsService
         try {
             const eventId = await repo.createEvent({
                 ...eventData,
-                id_creator_user: userId
+                id_creator_user: id_creator_user
             });
             return { success: true, message: "Evento creado exitosamente.", eventId };
         } catch (error) {
             console.error('Error en createEvent:', error);
             return { success: false, message: "Error al crear el evento." };
+        }
+    }
+
+    async getMaxCapacity(id_event_location)
+    {
+        const repo = new eventsRepository ();
+        try {
+            await repo.getMaxCapacity({
+                id_event_location
+            });
+            return true;
+        } catch (error) {
+            console.error('Error en updateEvent:', error);
+            return { success: false, message: "Error al actualizar el evento." };
         }
     }
 
@@ -62,13 +77,7 @@ export default class EventsService
 
         try {
             await repo.updateEvent({
-                id,
-                name,
-                description,
-                id_event_location,
-                max_assistance,
-                price,
-                duration_in_minutes
+                eventData
             });
             return { success: true, message: "Evento actualizado exitosamente." };
         } catch (error) {
