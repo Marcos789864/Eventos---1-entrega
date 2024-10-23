@@ -62,6 +62,22 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.get('/:idEventLocation', async (req, res) =>
+{
+    try {
+        const id = req.params.idEventLocation;
+        const response = await svc.getMaxCapacity(id);
+        if (response != null) {
+            return res.status(200).json(response);
+        } else {
+            return res.status(404).send('Id Inexistente.');
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Error interno.');
+    }
+});
+
 //Ejercicio 5
 router.get('/:id/enrollment', async (req, res) => {
     
@@ -104,7 +120,7 @@ router.post('/createEvent', async (req, res) => {
     }
 });
 
-router.put('/', MIDLEWARE.authMiddelware, async (req, res) => {
+router.patch('/', MIDLEWARE.authMiddelware, async (req, res) => {
     try {
         const updatedEvent = await svc.updateEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
         if (updatedEvent.success) {
@@ -145,7 +161,7 @@ router.delete('/:id', MIDLEWARE.authMiddelware, async (req, res) => {
 //Ejercicio 9 Start
 router.post('/:id/enrollment', MIDLEWARE.authMiddelware, async (req, res) => {
     try {
-        const enrollment = await svcE.enrollInEvent(req.params.id, req.user.id); // Se pasa el ID del usuario autenticado
+        const enrollment = await svcE.enrollInEvent(req.params.id, req.user.id); 
         if (enrollment.success) {
             return res.status(201).json(enrollment.message);
         } 

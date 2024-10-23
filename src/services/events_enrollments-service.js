@@ -39,6 +39,7 @@ export default class events_enrollmentsService
         const maxCapacity = event.max_assistance;
         const currentRegistrations = await repo.getUsersRegisteredCount(eventId);
         if (currentRegistrations >= maxCapacity) {
+            
             return { success: false, statusCode: 400, message: "Capacidad máxima del evento alcanzada." };
         }
     

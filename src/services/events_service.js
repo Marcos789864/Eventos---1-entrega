@@ -35,6 +35,20 @@ export default class EventsService
         }
     }
 
+    async getMaxCapacity(id_event_location)
+    {
+        const repo = new eventsRepository ();
+        try {
+            await repo.getMaxCapacity({
+                id_event_location
+            });
+            return true;
+        } catch (error) {
+            console.error('Error en updateEvent:', error);
+            return { success: false, message: "Error al actualizar el evento." };
+        }
+    }
+
     async updateEvent(eventData, userId) {
         const repo = new eventsRepository ();
         const { id, name, description, id_event_location, max_assistance, price, duration_in_minutes } = eventData;
@@ -63,13 +77,7 @@ export default class EventsService
 
         try {
             await repo.updateEvent({
-                id,
-                name,
-                description,
-                id_event_location,
-                max_assistance,
-                price,
-                duration_in_minutes
+                eventData
             });
             return { success: true, message: "Evento actualizado exitosamente." };
         } catch (error) {
