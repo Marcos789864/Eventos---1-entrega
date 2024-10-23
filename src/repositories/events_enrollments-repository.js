@@ -94,7 +94,8 @@ export default class events_enrollments
             const sql = 'SELECT * FROM event_enrollments WHERE id_event = $1 AND id_user = $2';
             const result = await client.query(sql, [eventId, userId]);
             await client.end();
-            return result.rows.length > 0;
+            console.log(result)
+            return result.rowCount > 0;
         } catch (error) {
             console.error('Error en checkUserRegistration:', error);
             throw new Error('Error al verificar la inscripción del usuario en el evento.');

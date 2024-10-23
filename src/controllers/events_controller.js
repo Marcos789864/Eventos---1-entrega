@@ -120,19 +120,23 @@ router.put('/', MIDLEWARE.authMiddelware, async (req, res) => {
     }
 });
 
-router.delete('/:id', MIDLEWARE.authMiddelware, async (req, res) => {
+router.delete('/:id/:id2/del',  async (req, res) => {
     try {
-        const deletedEvent = await svc.deleteEvent(req.params.id, req.user.id); // Se pasa el ID del usuario autenticado
+        const deletedEvent = await svc.deleteEvent(req.params.id, req.params.id2); // Se pasa el ID del usuario autenticado
         if (deletedEvent.success) {
+            console.log("1"+deletedEvent.message)
             return res.status(200).json(deletedEvent);
         } 
         else if (deletedEvent.statusCode === 400){
+            console.log("2"+deletedEvent.message)
             return res.status(400).send(deletedEvent.message);
         }
         else if (deletedEvent.statusCode === 401) {
+            console.log("3"+deletedEvent.message)
             return res.status(401).send(deletedEvent.message);
         } 
         else {
+            console.log("4"+deletedEvent.message)
             return res.status(404).send(deletedEvent.message);
         }
     } catch (error) {
@@ -143,16 +147,19 @@ router.delete('/:id', MIDLEWARE.authMiddelware, async (req, res) => {
 //Ejercicio 8 End
 
 //Ejercicio 9 Start
-router.post('/:id/enrollment', MIDLEWARE.authMiddelware, async (req, res) => {
+router.post('/:id/:id2/enrollment', async (req, res) => {
     try {
-        const enrollment = await svcE.enrollInEvent(req.params.id, req.user.id); // Se pasa el ID del usuario autenticado
+        const enrollment = await svcE.enrollInEvent(req.params.id, req.params.id2); // Se pasa el ID del usuario autenticado
         if (enrollment.success) {
+            console.log(enrollment)
             return res.status(201).json(enrollment.message);
         } 
         else if(enrollment.statusCode === 400){
+            console.log(enrollment)
             return res.status(400).json(enrollment.message);
         }
         else{
+            console.log(enrollment)
             return res.status(404).send(enrollment.message)
         }
     } catch (error) {

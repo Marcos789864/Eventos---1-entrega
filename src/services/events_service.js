@@ -7,7 +7,7 @@ export default class EventsService
 {
     async createEvent(eventData, userId) {
         const repo = new eventsRepository ();
-        const { name, description, id_event_location, max_assistance, price, duration_in_minutes } = eventData;
+        const { name, description, id_event_location, max_assistance, price, duration_in_minutes, enabled_for_enrollment } = eventData;
 
         if (!name || name.length < 3 || !description || description.length < 3) {
             return { success: false, message: "El nombre y la descripción deben tener al menos 3 caracteres." };
@@ -84,8 +84,7 @@ export default class EventsService
         if (!currentEvent) {
             return { success: false, statusCode: 404, message: "El evento no existe." };
         }
-
-        if (!(currentEvent.id_creator_user === userId)) {
+        if (currentEvent.id_creator_user != userId) {
             return { success: false, statusCode: 401, message: "El usuario no es creador del evento." };
         }
 

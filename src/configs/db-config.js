@@ -4,7 +4,7 @@ const DBConfig = {
     host      : "localhost",
     database  : "postgres",
     user      : "postgres",
-    password  : "root",
+    password  : "ricochet201",
     port      : 5432
 }
 export default DBConfig;

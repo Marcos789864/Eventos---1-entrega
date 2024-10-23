@@ -43,6 +43,7 @@ export default class events_enrollmentsService
         }
     
         const alreadyRegistered = await repoE.checkUserRegistration(eventId, userId);
+        console.log(alreadyRegistered)
         if (alreadyRegistered) {
             return { success: false, statusCode: 400, message: "El usuario ya se encuentra registrado en el evento." };
         }
