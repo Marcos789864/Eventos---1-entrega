@@ -7,8 +7,10 @@ const MIDLEWARE = new mdw();
 
 //Ejercicio 6 Start
 router.post('/login', async (req, res) => {
-        
+        console.log("username" + req.body.username)
+        console.log("password" + req.body.password)
         const response = await svc.login(req.body.username,req.body.password);
+        console.log("respuesta" + JSON.stringify(response));
         if (response != null) {
             if(response.success == true){
                 return res.status(200).json(response);

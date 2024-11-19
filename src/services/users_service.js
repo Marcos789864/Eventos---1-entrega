@@ -15,6 +15,7 @@ export default class UserService
         const repo = new UserRepository();
         if (validar.validarEmail(username)) {
             const usuario = await repo.getUserByUsername(username, password);
+            console.log("usuario obtenido" + usuario);
             if (usuario != null) {
                 const payload = {
                     id: usuario.id,
@@ -25,6 +26,7 @@ export default class UserService
                     expiresIn: '1h',
                 };
                 const token = jwt.sign(payload, 'ChinoMarcos', options);
+                console.log("token")
                 respuesta.success = true;
                 respuesta.message = "Login exitoso";
                 respuesta.dato = usuario.id;

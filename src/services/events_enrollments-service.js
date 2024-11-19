@@ -18,11 +18,11 @@ export default class events_enrollmentsService
         const currentDate = new Date();
 
         const currentDayOfMonth = currentDate.getDate();
-        const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
+        const currentMonth = currentDate.getMonth(); 
         const currentYear = currentDate.getFullYear();
         
         const timestamp = currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
-        // "27-11-2020"
+       
 
         if (!event) {
             return { success: false, statusCode: 404, message: "El evento no existe." };
@@ -37,12 +37,17 @@ export default class events_enrollmentsService
         }
     
         const maxCapacity = event.max_assistance;
+        console.log("event id " + eventId);
+        console.log("Max assistance event" + event.max_assistance);
         const currentRegistrations = await repo.getUsersRegisteredCount(eventId);
-        if (currentRegistrations >= maxCapacity) {
+
+        console.log("registro actuales" + JSON.stringify(currentRegistrations));
+        console.log(Object.keys(currentRegistrations).length);
+        if (Object.keys(currentRegistrations).length >= maxCapacity) {
             
             return { success: false, statusCode: 400, message: "Capacidad máxima del evento alcanzada." };
         }
-    
+        
         const alreadyRegistered = await repoE.checkUserRegistration(eventId, userId);
         console.log(alreadyRegistered)
         if (alreadyRegistered) {

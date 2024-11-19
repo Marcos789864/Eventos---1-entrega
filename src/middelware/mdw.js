@@ -10,9 +10,12 @@ export default class MWD
             let token = req.headers.authorization;
             try
             {
+                console.log('Authorization Header:', req.headers.authorization);
+
                 let noBearer = token.slice(7)
                 let payload = await jwt.verify(noBearer,'ChinoMarcos');
                 req.user = payload;
+                console.log(req.user);
                 if(payload != null){
                     next();
                 }

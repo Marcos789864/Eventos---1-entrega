@@ -25,12 +25,29 @@ router.get('/getAll', async (req,res) =>
     }
 });
 
+router.get('/getDetail', async (req,res) =>
+    {
+        try
+        {
+            const events = await svc.getEventDetail();
+            if (events != null) {
+                return res.status(200).json(events);
+            } else {
+                return res.status(500).send('Error interno.');
+            }
+        }catch{
+            return res.status(500).send('Error interno.');
+        }
+    });
+
+
+
 //Ejercicio 3
 router.get('', async (req, res) => {
     try {
         const query = req.query;
 
-        const events = await svc.getEvents(query);
+        const events = await svc.getEventsAvailables(query);
 
         if (events != null) {
             return res.status(200).json(events);
@@ -105,7 +122,7 @@ router.get('/:id/enrollment', async (req, res) => {
 });
 
 
-router.post('/createEvent', async (req, res) => {
+router.post('/createEvent', MIDLEWARE.authMiddelware, async (req, res) => {
     console.log(req.body)
     try {
         const enrollment = await svc.createEvent(req.body); // Se pasa el ID del usuario autenticado
@@ -120,9 +137,9 @@ router.post('/createEvent', async (req, res) => {
     }
 });
 
-router.patch('/', MIDLEWARE.authMiddelware, async (req, res) => {
+router.patch('', MIDLEWARE.authMiddelware, async (req, res) => {
     try {
-        const updatedEvent = await svc.updateEvent(req.body, req.user.id); // Se pasa el ID del usuario autenticado
+        const updatedEvent = await svc.updateEvent(req.body, req.user.id); 
         if (updatedEvent.success) {
             return res.status(200).json(updatedEvent);
         } else if (updatedEvent.statusCode === 401) {

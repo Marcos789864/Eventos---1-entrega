@@ -8,12 +8,15 @@ export default class UserRepository
     {
         let returnEntity = null;
         const client = new Client(DBConfig);
+        console.log("username get user"+  username);
+        console.log("password get user password" + password);
         try
         {
             await client.connect();
             const sql =  'SELECT * FROM users WHERE username = $1 AND password = $2';
             const result = await client.query(sql,[username,password]);
             await client.end();
+            console.log("resultado" + result);
             if (result.rows.length > 0){
 
                 returnEntity = result.rows[0];
