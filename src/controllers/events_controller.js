@@ -25,11 +25,12 @@ router.get('/getAll', async (req,res) =>
     }
 });
 
-router.get('/getDetail', async (req,res) =>
+router.get('/getDetail/:id', async (req,res) =>
     {
+        const id = req.params.id;
         try
         {
-            const events = await svc.getEventDetail();
+            const events = await svc.getEventDetail(id);
             if (events != null) {
                 return res.status(200).json(events);
             } else {
@@ -59,6 +60,9 @@ router.get('', async (req, res) => {
         return res.status(500).send('Error interno.');
     }
 });
+
+
+
 
 //Ejercicio 4
 router.get('/:id', async (req, res) => {
