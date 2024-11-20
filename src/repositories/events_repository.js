@@ -62,7 +62,8 @@ export default class eventsRepository
             FROM event_enrollments
             WHERE id_event = $1`;
             const result = await client.query(sql, [eventId]);
-            return result.rows;
+            console.log(result.rowCount);
+            return result.rowCount;
         } 
         catch (error) {
             console.error('Error en getUsersRegisteredCount:', error);

@@ -97,16 +97,17 @@ export default class EventsService
         
         const repo = new eventsRepository ();
         const currentEvent = await repo.getEventById(eventId);
+        console.log("evento de ahora" + JSON.stringify(currentEvent, null, 2));
         if (!currentEvent) {
             return { success: false, statusCode: 404, message: "El evento no existe." };
         }
         if (currentEvent.id_creator_user != userId) {
             return { success: false, statusCode: 401, message: "El usuario no es creador del evento." };
         }
-
+        console.log("evento id " + eventId);
         const usersRegistered = await repo.getUsersRegisteredCount(eventId);
-
-        if (usersRegistered != undefined) {
+        console.log("usuarios para el user registered" + usersRegistered);
+        if (usersRegistered != 0) {
             return { success: false, statuscode: 400 , message: "No se puede eliminar el evento porque hay usuarios registrados." };
         }
 
